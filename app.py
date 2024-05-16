@@ -3,12 +3,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 
 @app.route('/')
 def hello_world():
     return jsonify(message="Hello, world!")
+
 
 @app.route('/get-connected-addresses', methods=['GET'])
 def verify():
@@ -25,9 +27,7 @@ def verify():
     except requests.RequestException as e:
         return jsonify({'error': str(e)}), 400
     
-    response = jsonify(response.json())
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+    return jsonify(response.json())
     
 if __name__ == '__main__':
     app.run(debug=True)
