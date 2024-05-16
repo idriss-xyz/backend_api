@@ -26,10 +26,7 @@ def verify():
         return jsonify({'error': str(e)}), 400
     
     response = jsonify(response.json())
-    if 'Origin' in request.headers and request.headers['Origin'] == 'null':
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        response.headers.add('Access-Control-Allow-Methods', 'GET')
-        response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
     
 if __name__ == '__main__':
