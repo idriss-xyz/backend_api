@@ -1,4 +1,7 @@
+import os
+
 import requests
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -61,6 +64,25 @@ def get_twitter():
     formatted_response = {'id': response_json['twitterIDs'][identifier]}
     print(formatted_response)
     return jsonify(formatted_response), 200
+
+
+@app.route('/resolve-unstoppable-domains', methods=['GET'])
+@limiter.limit("10 per minute")
+def get_ud():
+    domain = request.args.get('domain')
+    
+    if not domain:
+        return jsonify({'error': 'Missing identifier parameter'}), 400
+
+    url = f"https://api.unstoppabledomains.com/resolve/domains/{domain}"
+    try:
+        response = requests.get(url, headers={'accept': 'application/json', 'authorization': f'Bearer {os.getenv("UD_API_KEY")}'})
+        response.raise_for_status()
+    except requests.RequestException as e:
+        return jsonify({'error': str(e)}), 400
+    print(response.json())
+    response_json = response.json()
+    return jsonify(response_json), 200
     
 if __name__ == '__main__':
     app.run(debug=True)
