@@ -59,9 +59,7 @@ def get_twitter():
         return jsonify({'error': str(e)}), 400
     print(response.json())
     response_json = response.json()
-    if response_json['twitterIDs'] == {}:
-        formatted_response = {'id': 'Not found'}
-    formatted_response = {'id': response_json['twitterIDs'][identifier]}
+    formatted_response = {'id': response_json['twitterIDs'].get(identifier, "Not found")}
     print(formatted_response)
     return jsonify(formatted_response), 200
 
