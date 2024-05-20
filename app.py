@@ -1,13 +1,13 @@
 import os
 
 import requests
-from dotenv import load_dotenv
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from utils.constants import PRICING_API_URL
+from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
+from utils.utils import get_token_router
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -23,7 +23,7 @@ limiter.init_app(app)
 
 @app.route('/')
 def hello_world():
-    return jsonify(message="Hello, world!")
+    return jsonify(message="Hello, API!")
 
 
 @app.route('/get-connected-addresses', methods=['GET'])
@@ -89,7 +89,7 @@ def get_ud():
 @limiter.limit("10 per minute")
 def get_token_price():
     if request.method == "OPTIONS":
-        response = jsonify({"message": "ok"}), 200
+        response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
@@ -99,8 +99,19 @@ def get_token_price():
     network = request.args.get("network", "1")
 
     if not sell_token or not buy_token or not sell_amount:
-        response = jsonify({"error": "Missing required parameters"}), 400
+        response = make_response({"error": "Missing required parameters"}, 400)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
+    print(network, buy_token, sell_token)
+    if network in UNSUPPORTED_0x_NETWORKS:
+        try:
+            network, buy_token, sell_token = get_token_router(network, buy_token, sell_token)
+            print(network, buy_token, sell_token)
+        except KeyError:
+            status_code = e.response.status_code if hasattr(e, "response") else 400
+            response = make_response({"error": "Token pair not supported"}, status_code)
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+            return response
 
     api_key = os.getenv("API_KEY_0X")
     url = f"{PRICING_API_URL[network]}/swap/v1/price?sellToken={sell_token}&buyToken={buy_token}&sellAmount={sell_amount}"
@@ -109,12 +120,12 @@ def get_token_price():
     try:
         api_response = requests.get(url, headers=headers, timeout=10)
         api_response.raise_for_status()  # Will raise HTTPError for bad requests
-        response = jsonify(api_response.json()), api_response.status_code
+        response = make_response(api_response.json(), api_response.status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
     except requests.RequestException as e:
         status_code = e.response.status_code if hasattr(e, "response") else 400
-        response = jsonify({"error": str(e)}), status_code
+        response = make_response({"error": str(e)}, status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
     
