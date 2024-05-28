@@ -1,7 +1,6 @@
-import jsonify
 import requests
+from flask import Blueprint, jsonify, request
 
-from flask import Blueprint, request
 from utils.farcaster import get_farcaster_verified_addresses
 
 farcaster_bp = Blueprint("fc", __name__)

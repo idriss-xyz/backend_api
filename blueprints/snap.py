@@ -1,10 +1,9 @@
-import jsonify
 import requests
+from flask import Blueprint, jsonify, request
 
-from flask import Blueprint, request
+from utils.farcaster import get_farcaster_verified_addresses
 from utils.limiter import limiter
 from utils.twitter import get_twitter_id
-from utils.farcaster import  get_farcaster_verified_addresses
 from utils.unstoppable_domains import get_unstoppable_domain_owner
 
 snap_bp = Blueprint("resolver_snap", __name__)

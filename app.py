@@ -1,10 +1,10 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-from utils.limiter import limiter
-from blueprints.snap import snap_bp
-from blueprints.farcaster import farcaster_bp
 from blueprints.extension import extension_bp
+from blueprints.farcaster import farcaster_bp
+from blueprints.snap import snap_bp
+from utils.limiter import limiter
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
