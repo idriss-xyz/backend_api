@@ -4,6 +4,7 @@ import requests
 from flask import Blueprint, make_response, request
 
 from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
+from utils.file_handler import fetch_custom_badges
 from utils.limiter import limiter
 from utils.utils import get_token_router
 
@@ -80,3 +81,16 @@ def fetch_agora():
         response = make_response({"error": str(e)}, status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
+
+
+@extension_bp.route('/custom-badges', methods=["GET", "OPTIONS"])
+def fetch_custom_twitter_badges():
+    if request.method == "OPTIONS":
+        response = make_response({"message": "ok"}, 200)
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    data = fetch_custom_badges()
+    response = make_response(data, 200)
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
