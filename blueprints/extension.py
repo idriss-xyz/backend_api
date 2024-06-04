@@ -1,10 +1,11 @@
 import os
+
 import requests
 from flask import Blueprint, make_response, request
 
-from utils.constants import UNSUPPORTED_0x_NETWORKS, PRICING_API_URL
-from utils.utils import get_token_router
+from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
 from utils.limiter import limiter
+from utils.utils import get_token_router
 
 extension_bp = Blueprint("extension", __name__)
 
@@ -45,6 +46,32 @@ def get_token_price():
     try:
         api_response = requests.get(url, headers=headers, timeout=10)
         api_response.raise_for_status()  # Will raise HTTPError for bad requests
+        response = make_response(api_response.json(), api_response.status_code)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    except requests.RequestException as e:
+        status_code = e.response.status_code if hasattr(e, "response") else 400
+        response = make_response({"error": str(e)}, status_code)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
+
+@extension_bp.route('/fetch-agora', methods=["GET", "OPTIONS"])
+@limiter.limit("20 per minute")
+def fetch_agora():
+    if request.method == "OPTIONS":
+        response = make_response({"message": "ok"}, 200)
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    limit = request.args.get("limit", 1)
+    offset = request.args.get("offset", 0)
+    url = f'https://vote.optimism.io/api/v1/proposals?limit=${limit}&offset=${offset}'
+    headers = {"bearerAuth ": os.getenv("API_KEY_AGORA")}
+
+    try:
+        api_response = requests.get(url, headers=headers, timeout=10)
+        api_response.raise_for_status()
         response = make_response(api_response.json(), api_response.status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
