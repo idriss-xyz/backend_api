@@ -1,348 +1,107 @@
 {
-  "proposalsResponses": [
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
-        },
-        "proposals": [
-          {
-            "proposalId": "4537769538885163906898768401836322976193114338273264147746088063279656611139",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "Intents are high-level strategic goals for the Collective. Each Intent is equipped with a Seasonal budget. The Foundation has proposed the below budgets under relevant Intents for Season 6. https://gov.optimism.io/t/season-6-intents-ratification/8104 Intent 1: Progress Towards Decentralization Proposed Gov Fund Budget: 500k OP",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Season 6: Intent Budgets",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T22:07:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
+  "data": {
+    "metadata": {
+      "has_next": true,
+      "total_returned": 1073741824,
+      "next_offset": 1073741824
     },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
+    "proposals": [
+      {
+        "proposalId": "4537769538885163906898768401836322976193114338273264147746088063279656611139",
+        "contractAddress": "contractAddress",
+        "proposerAddress": "optimism.eth",
+        "description": "Intents are high-level strategic goals for the Collective. Each Intent is equipped with a Seasonal budget. The Foundation has proposed the below budgets under relevant Intents for Season 6. https://gov.optimism.io/t/season-6-intents-ratification/8104 Intent 1: Progress Towards Decentralization Proposed Gov Fund Budget: 500k OP",
+        "ordinal": "ordinal",
+        "createBlock": "createBlock",
+        "startBlock": "startBlock",
+        "endBlock": "endBlock",
+        "cancelledBlock": "cancelledBlock",
+        "executedBlock": "executedBlock",
+        "proposalData": {
+          "votingStrategy": "STANDARD",
+          "title": "Season 6: Proposal 1",
+          "startTimestamp": "2024-05-29T16:54:38.631Z",
+          "endTimestamp": "2024-05-29T22:07:38.631Z",
+          "createdTimestamp": "2024-05-29T16:54:38.631Z",
+          "link": "link",
+          "scores": ["scores"],
+          "votes": "votes",
+          "state": "SUCCEEDED"
         },
-        "proposals": [
-          {
-            "proposalId": "23296680451920040311284556255465306513981293154669425902294655221457403608367",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "The Grants Council plays an important role in the Collective and is assumed to persist each Season. The Token House may vote on a Council Operating Budget, thereby electing the proposal author as Council Lead. Delegates are effectively electing the Council Lead that has authored the approved budget.The sole proposed Grants Council Operating Budget is proposed by Gonna.eth with a proposed operating budget of 610k OP: https://gov.optimism.io/t/season-6-grants-council-operating-budget/8171 This proposal is eligible for Special Voting Cycle #23a: https://gov.optimism.io/t/season-6-grants-council-operating-budget/8082",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Season 6: Grants Council Operating Budget",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:54:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
+        "proposalTemplate": {
+          "name": "name",
+          "proposalTemplateId": 0,
+          "votingStrategy": "STANDARD",
+          "quorum": "quorum",
+          "approvalThreshold": "approvalThreshold",
+          "contractAddress": "contractAddress",
+          "createBlock": "createBlock"
+        }
+      },
+      {
+        "cancelledBlock": "cancelledBlock",
+        "contractAddress": "contractAddress",
+        "createBlock": "createBlock",
+        "description": "Intents are high-level strategic goals for the Collective. Each Intent is equipped with a Seasonal budget. The Foundation has proposed the below budgets under relevant Intents for Season 6. https://gov.optimism.io/t/season-6-intents-ratification/8104 Intent 1: Progress Towards Decentralization Proposed Gov Fund Budget: 500k OP",
+        "endBlock": "endBlock",
+        "executedBlock": "executedBlock",
+        "ordinal": "ordinal",
+        "proposalData": {
+          "createdTimestamp": "2024-05-29T16:54:38.631Z",
+          "endTimestamp": "2024-05-29T22:07:38.631Z",
+          "link": "link",
+          "scores": ["scores"],
+          "startTimestamp": "2024-05-29T16:54:38.631Z",
+          "state": "SUCCEEDED",
+          "title": "Season 6: Proposal 2",
+          "votes": "votes",
+          "votingStrategy": "STANDARD"
         },
-        "proposals": [
-          {
-            "proposalId": "6975052961793121236744122111241179429220183353809219742149740939877970567765",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "The Token House experimented with a Developer Advisory Board in Season 5. It is now time for delegates to assess whether the Board should be renewed.Delegates may choose to approve an operating budget for the Developer Advisory Board to continue in Season 6. The operating budget with the highest number of “Yes” votes will be approved, electing the proposal author as Council Lead. If delegates do not believe the Developer Advisory Board should continue, they should not approve any operating budget for a Developer Advisory Board.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Season 6: Developer Advisory Board Renewal",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:54:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
+        "proposalId": "4537769538885163906898768401836322976193114338273264147746088063279656611139",
+        "proposalTemplate": {
+          "approvalThreshold": "approvalThreshold",
+          "contractAddress": "contractAddress",
+          "createBlock": "createBlock",
+          "name": "name",
+          "proposalTemplateId": 0,
+          "quorum": "quorum",
+          "votingStrategy": "STANDARD"
         },
-        "proposals": [
-          {
-            "proposalId": "46662599590868619415724059715206858415123913604990481279137083354870809650669",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "Intents are high-level strategic goals for the Collective. As the Collective grows and these goals extend to the broader Superchain ecosystem, the Foundation will propose all Intents for Season 6. These Intents must be ratified by the full Token House. Ratification implies support of these strategic goals for Season 6. Intent 1: Progress Towards Decentralization The Collective must continue progressing towards decentralized, scalable compute. This includes both technical and governance decentralization.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Season 6: Intents Ratification",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:05:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
+        "proposerAddress": "optimism.eth",
+        "startBlock": "startBlock"
+      },
+      {
+        "cancelledBlock": "cancelledBlock",
+        "contractAddress": "contractAddress",
+        "createBlock": "createBlock",
+        "description": "Intents are high-level strategic goals for the Collective. Each Intent is equipped with a Seasonal budget. The Foundation has proposed the below budgets under relevant Intents for Season 6. https://gov.optimism.io/t/season-6-intents-ratification/8104 Intent 1: Progress Towards Decentralization Proposed Gov Fund Budget: 500k OP",
+        "endBlock": "endBlock",
+        "executedBlock": "executedBlock",
+        "ordinal": "ordinal",
+        "proposalData": {
+          "createdTimestamp": "2024-05-29T16:54:38.631Z",
+          "endTimestamp": "2024-05-29T22:07:38.631Z",
+          "link": "link",
+          "scores": ["scores"],
+          "startTimestamp": "2024-05-29T16:54:38.631Z",
+          "state": "SUCCEEDED",
+          "title": "Season 6: Proposal 3",
+          "votes": "votes",
+          "votingStrategy": "STANDARD"
         },
-        "proposals": [
-          {
-            "proposalId": "105090569675606228680479820654354019470447822380910214626164858605991232311940",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "Please read Code of Conduct Rescoping #2 before voting on this proposal: https://gov.optimism.io/t/season-6-code-of-conduct-rescoping-2/8101The Token House experimented with a Code of Conduct Council in Season 5. It is now time for delegates to assess whether the Council should be renewed. Delegates may choose to approve an operating budget for the Code of Conduct Council to oversee the Rules of Engagement in Season 6, effectively electing the proposal author as Council Lead. If delegates do not believe an elected Council is necessary to enforce the Rules of Engagement, they should not approve any operating budget for a Code of Conduct Council.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Season 6: Code of Conduct Council Renewal",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:05:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "DEFEATED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
+        "proposalId": "4537769538885163906898768401836322976193114338273264147746088063279656611139",
+        "proposalTemplate": {
+          "approvalThreshold": "approvalThreshold",
+          "contractAddress": "contractAddress",
+          "createBlock": "createBlock",
+          "name": "name",
+          "proposalTemplateId": 0,
+          "quorum": "quorum",
+          "votingStrategy": "STANDARD"
         },
-        "proposals": [
-          {
-            "proposalId": "47257038716514883626179774712509684309799801257166588609178192779726195852111",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "This proposal introduces improvements to the Alligator allowance storage system, enabling partial and sub-delegation for OP voters. This update ensures accurate voting power calculation, addressing issues found in advanced delegation. If approved by governance, the Optimism Foundation admin will set the new implementation of governor proxy at 0xcDF27F107725988f2261Ce2256bDfCdE8B382B10 to new implementation deployed at 0xb7b1c8d8cc590b91623f493af3ee8c0a0a282b74.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Governor Update Proposal #2: Improvements to advanced delegation allowance calculations",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:05:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
+        "proposerAddress": "optimism.eth",
+        "startBlock": "startBlock"
       }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": true,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
-        },
-        "proposals": [
-          {
-            "proposalId": "89250535338859095270968116984279971013811713632639468811376241520756760598962",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "This protocol upgrade enhances security and decentralization by increasing the Security Council Safe’s signing threshold from 4 to 10 out of 13, reassigning the Guardian role to a new Guardian Safe controlled by the Security Council Safe, and appointing the Foundation as DeputyGuardian. It also reassigns the L2ProxyAdmin contract owner from the Foundation to the Security Council, ensuring the Security Council Safe has a blocking vote for L2 predeploy upgrades. Combined with Protocol Upgrade #7, we believe this satisfies the criteria to have OP Chains reach Stage 1 status.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Protocol Upgrade #8: Changes for Stage 1 Decentralization",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T12:05:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "data": {
-        "metadata": {
-          "has_next": false,
-          "total_returned": 1073741824,
-          "next_offset": 1073741824
-        },
-        "proposals": [
-          {
-            "proposalId": "72085170435228531173144599119267762084652443676555508407874836206178427511368",
-            "contractAddress": "contractAddress",
-            "proposerAddress": "optimism.eth",
-            "description": "This upgrade reduces trust assumptions for OP Mainnet users by enabling permissionless output proposals and a fault proof system, maintaining the guardian's override capability for security. Withdrawals will no longer rely on a privileged proposer, allowing the process to be completed without any privileged actions. Combined with Protocol Upgrade #8, we believe this satisfies the criteria to have OP Chains reach Stage 1 status.",
-            "ordinal": "ordinal",
-            "createBlock": "createBlock",
-            "startBlock": "startBlock",
-            "endBlock": "endBlock",
-            "cancelledBlock": "cancelledBlock",
-            "executedBlock": "executedBlock",
-            "proposalData": {
-              "votingStrategy": "STANDARD",
-              "title": "Protocol Upgrade #7: Fault Proofs",
-              "startTimestamp": "2024-05-29T16:54:38.631Z",
-              "endTimestamp": "2024-05-29T21:05:38.631Z",
-              "createdTimestamp": "2024-05-29T16:54:38.631Z",
-              "link": "link",
-              "scores": ["scores"],
-              "votes": "votes",
-              "state": "SUCCEEDED"
-            },
-            "proposalTemplate": {
-              "name": "name",
-              "proposalTemplateId": 0,
-              "votingStrategy": "STANDARD",
-              "quorum": "quorum",
-              "approvalThreshold": "approvalThreshold",
-              "contractAddress": "contractAddress",
-              "createBlock": "createBlock"
-            }
-          }
-        ]
-      }
-    }
-  ]
+    ]
+  }
 }
