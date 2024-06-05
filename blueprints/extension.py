@@ -4,7 +4,7 @@ import requests
 from flask import Blueprint, make_response, request
 
 from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
-from utils.file_handler import fetch_custom_badges
+from utils.file_handler import fetch_agora_mock, fetch_custom_badges
 from utils.limiter import limiter
 from utils.utils import get_token_router
 
@@ -71,9 +71,13 @@ def fetch_agora():
     headers = {"bearerAuth ": os.getenv("API_KEY_AGORA")}
 
     try:
-        api_response = requests.get(url, headers=headers, timeout=10)
-        api_response.raise_for_status()
-        response = make_response(api_response.json(), api_response.status_code)
+        # api_response = requests.get(url, headers=headers, timeout=10)
+        # api_response.raise_for_status()
+        # response = make_response(api_response.json(), api_response.status_code)
+        ## MOCK START
+        api_response = fetch_agora_mock()
+        response = make_response(api_response, 200)
+        ## MOCK END
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
     except requests.RequestException as e:
