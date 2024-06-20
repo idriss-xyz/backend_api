@@ -36,9 +36,9 @@ def fetch_agora_mock():
 
 def get_status():
     root_dir = os.path.dirname(
-        os.path.dirname(os.path.dirname(__file__))
+        os.path.dirname(os.path.abspath(__file__))
     )
-    file_path = os.path.join(root_dir, "data", "service-status.json")
+    file_path = os.path.join(root_dir, "data", "serviceStatus.json")
     with open(file_path, "r", encoding="utf-8") as service_status:
         status = json.load(service_status)
     return status
