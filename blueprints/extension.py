@@ -4,11 +4,32 @@ import requests
 from flask import Blueprint, make_response, request
 
 from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
-from utils.file_handler import fetch_agora_mock, fetch_custom_badges, fetch_handles
+from utils.file_handler import (
+    fetch_agora_mock,
+    fetch_custom_badges,
+    fetch_handles,
+    get_status,
+)
 from utils.limiter import limiter
 from utils.utils import get_token_router
 
 extension_bp = Blueprint("extension", __name__)
+
+@extension_bp.route("/service-status", methods=["GET", "OPTIONS"])
+def return_service_status():
+    """
+    Allows to set up kill switches for services in our extension
+
+    Returns:
+        Response: A json response that indicates if a status from our extension is active or not.
+    """
+    if request.method == "OPTIONS":
+        response = make_response({"message": "ok"}, 200)
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    status = get_status()
+    return status, 200
 
 
 # Add additional headers for extension context

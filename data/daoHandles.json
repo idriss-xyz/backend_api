@@ -1,5 +1,5 @@
 {
-    "snapshot": {
+  "snapshot": {
     "aave": "aave.eth",
     "aavegotchi": "aavegotchi.eth",
     "acrossprotocol": "acrossprotocol.eth",
@@ -25,5 +25,15 @@
     "sushiswap": "sushigov.eth",
     "gearboxprotocol": "gearbox.eth",
     "metisl2": "metislayer2.eth"
+  },
+  "agora": {
+    "arbitrum": "arbitrum",
+    "lilnounsdao": "lil-nouns",
+    "letsgethai": "hai",
+    "idlefinance": "idle",
+    "unlockprotocol": "unlock",
+    "internet_token": "internet-token-dao",
+    "contentguildxyz": "content-guild-arbitrum-old",
+    "lxdao_official": "lxdao"
   }
 }
