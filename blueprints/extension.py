@@ -176,7 +176,7 @@ def fetch_custom_twitter_badges():
     return response
 
 
-@extension_bp.route('/dao-handles', methods=["GET", "OPTIONS"])
+@extension_bp.route('/dao-twitter-handles', methods=["GET", "OPTIONS"])
 @limiter.limit("20 per minute")
 def fetch_dao_handles():
     if request.method == "OPTIONS":
