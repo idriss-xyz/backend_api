@@ -27,13 +27,24 @@
     "metisl2": "metislayer2.eth"
   },
   "tally": {
-    "arbitrum": "arbitrum",
-    "lilnounsdao": "lil-nouns",
-    "letsgethai": "hai",
-    "idlefinance": "idle",
-    "unlockprotocol": "unlock",
-    "internet_token": "internet-token-dao",
-    "contentguildxyz": "content-guild-arbitrum-old",
-    "lxdao_official": "lxdao"
+    "arbitrum": "2206072050315953936",
+    "lilnounsdao": "2206072050408228378",
+    "nounsdao": "2206072050408228378",
+    "letsgethai": "2260960194542438166",
+    "idlefinance": "2206072050408228376",
+    "unlockprotocol": "2206072050307565245",
+    "internet_token": "2289260179507643466",
+    "contentguildxyz": "2246136695814621138",
+    "lxdao_official": "2349116776505149049",
+    "uniswap": "2206072050458560434",
+    "compoundfinance": "2206072050458560433",
+    "hopprotocol": "2206072050408228377",
+    "dopewars": "2206072050307565230",
+    "aave": "2206072049829414624",
+    "ensdomains": "2206072050458560426",
+    "optimism": "2206072049871356990",
+    "optimismgov": "2206072049871356990",
+    "gitcoin": "2206072049862969321",
+    "pooltogether_": "2206072050324342616"
   }
 }

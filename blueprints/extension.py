@@ -3,7 +3,7 @@ import os
 import requests
 from flask import Blueprint, make_response, request
 
-from utils.constants import PRICING_API_URL, UNSUPPORTED_0x_NETWORKS
+from utils.constants import PRICING_API_URL, TALLY_QUERY, UNSUPPORTED_0x_NETWORKS
 from utils.file_handler import (
     fetch_agora_mock,
     fetch_custom_badges,
@@ -106,6 +106,61 @@ def fetch_agora():
         response = make_response({"error": str(e)}, status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
+
+
+@extension_bp.route('/fetch-tally', methods=["GET", "OPTIONS"])
+@limiter.limit("1 per second")
+def fetch_tally():
+    if request.method == "OPTIONS":
+        response = make_response({"message": "ok"}, 200)
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    
+    twitter_name = request.args.get('twitter-name')
+    
+    if not twitter_name:
+        response = make_response({"error": "Missing required parameter: twitter-name."}, 400)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
+    twitter_name = twitter_name.replace("@", "").lower()
+
+    handles = fetch_handles()
+
+    tally_organization_id = handles['tally'].get(twitter_name, None)
+    if not tally_organization_id:
+        response = make_response({"error": "No DAO associated with this handle."}, 404)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    
+    url = 'https://api.tally.xyz/query'
+    variables = {
+        "input": {
+            "filters": {
+            "includeArchived": False,
+            "organizationId": tally_organization_id
+            },
+            "page": {
+            "limit": 1
+            }
+        }
+        }
+    data = {"operationName": "ProposalsV2", "query": TALLY_QUERY, "variables": variables}
+    headers = {"Api-Key": os.getenv("API_KEY_TALLY")}
+
+    try:
+        api_response = requests.post(url, json=data, headers=headers, timeout=60)
+        api_response.raise_for_status()
+        response = make_response(api_response.json(), api_response.status_code)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    except requests.RequestException as e:
+        status_code = e.response.status_code if hasattr(e, "response") else 400
+        response = make_response({"error": str(e)}, status_code)
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
 
 
 @extension_bp.route('/custom-badges', methods=["GET", "OPTIONS"])
