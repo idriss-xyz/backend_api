@@ -143,7 +143,7 @@ def fetch_tally():
             "organizationId": tally_organization_id
             },
             "page": {
-            "limit": 1,
+            "limit": 2,
             "afterCursor": after_cursor
             }
         }
