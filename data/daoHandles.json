@@ -24,7 +24,21 @@
     "1inchdao": "1inch.eth",
     "sushiswap": "sushigov.eth",
     "gearboxprotocol": "gearbox.eth",
-    "metisl2": "metislayer2.eth"
+    "metisl2": "metislayer2.eth",
+    "idriss_xyz": "idrissxyz.eth",
+    "autonolas": "autonolas.eth",
+    "unlockprotocol": "unlock-protocol.eth",
+    "pooltogether_": "pooltogether.eth",
+    "lineabuild": "linea-build.eth",
+    "syncswap": "syncswapxyz.eth",
+    "juiceboxeth": "jbdao.eth",
+    "echelonfnd": "echelonassembly.eth",
+    "aiwayfinder": "wayfinderfoundation.eth",
+    "paragonsdao": "paragonsdao.eth",
+    "kwenta_io": "kwenta.eth",
+    "cowswap": "cow.eth",
+    "ethstatus": "status.eth",
+    "optimismgov": "citizenshouse.eth"
   },
   "tally": {
     "arbitrum": "2206072050315953936",
