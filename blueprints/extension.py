@@ -118,6 +118,7 @@ def fetch_tally():
         return response
     
     twitter_name = request.args.get('twitter-name')
+    after_cursor = request.args.get('afterCursor', None)
     
     if not twitter_name:
         response = make_response({"error": "Missing required parameter: twitter-name."}, 400)
@@ -142,10 +143,11 @@ def fetch_tally():
             "organizationId": tally_organization_id
             },
             "page": {
-            "limit": 1
+            "limit": 1,
+            "afterCursor": after_cursor
             }
         }
-        }
+    }
     data = {"operationName": "ProposalsV2", "query": TALLY_QUERY, "variables": variables}
     headers = {"Api-Key": os.getenv("API_KEY_TALLY")}
 
