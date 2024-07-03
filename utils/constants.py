@@ -32,7 +32,7 @@ TOKEN_ROUTE = {
 UNSUPPORTED_0x_NETWORKS = ["324", "5000", "59144", "534352"]
 
 TALLY_QUERY = """
-    query ProposalsV2($input: ProposalsInput!) {
+    query Proposals($input: ProposalsInput!) {
   proposalsV2(input: $input) {
     nodes {
       ... on ProposalV2 {
