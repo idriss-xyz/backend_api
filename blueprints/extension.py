@@ -148,7 +148,7 @@ def fetch_tally():
             }
         }
     }
-    data = {"operationName": "ProposalsV2", "query": TALLY_QUERY, "variables": variables}
+    data = {"operationName": "Proposals", "query": TALLY_QUERY, "variables": variables}
     headers = {"Api-Key": os.getenv("API_KEY_TALLY")}
 
     try:
