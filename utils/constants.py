@@ -33,9 +33,9 @@ UNSUPPORTED_0x_NETWORKS = ["324", "5000", "59144", "534352"]
 
 TALLY_QUERY = """
     query Proposals($input: ProposalsInput!) {
-  proposalsV2(input: $input) {
+  proposals(input: $input) {
     nodes {
-      ... on ProposalV2 {
+      ... on Proposal {
         id
         end {
           ... on Block {
