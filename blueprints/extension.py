@@ -155,9 +155,9 @@ def fetch_tally():
         api_response = requests.post(url, json=data, headers=headers, timeout=60)
         api_response.raise_for_status()
         response_json = api_response.json()
-        if "proposals" in response_json:
-            response_json["proposalsV2"] = response_json.pop("proposals")
-        response = make_response(api_response.json(), api_response.status_code)
+        if "proposals" in response_json["data"]:
+            response_json["data"]["proposalsV2"] = response_json["data"].pop("proposals")
+        response = make_response(response_json, api_response.status_code)
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
     except requests.RequestException as e:
