@@ -7,6 +7,7 @@ from utils.constants import PRICING_API_URL, TALLY_QUERY, UNSUPPORTED_0x_NETWORK
 from utils.file_handler import (
     fetch_agora_mock,
     fetch_custom_badges,
+    fetch_gitcoin_rounds,
     fetch_handles,
     get_status,
 )
@@ -23,6 +24,7 @@ def return_service_status():
     Returns:
         Response: A json response that indicates if a status from our extension is active or not.
     """
+    print(request.headers)
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
@@ -176,6 +178,19 @@ def fetch_custom_twitter_badges():
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
     data = fetch_custom_badges()
+    response = make_response(data, 200)
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    return response
+
+
+@extension_bp.route('/gitcoin-rounds', methods=["GET", "OPTIONS"])
+def fetch_gitcoin_rounds():
+    if request.method == "OPTIONS":
+        response = make_response({"message": "ok"}, 200)
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+    data = fetch_gitcoin_rounds()
     response = make_response(data, 200)
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response

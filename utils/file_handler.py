@@ -12,6 +12,18 @@ def fetch_custom_badges():
         data = json.load(badges)
     return data
 
+
+def fetch_gitcoin_rounds():
+    root_dir = os.path.dirname(
+        os.path.dirname(os.path.abspath(__file__))
+    )
+    file_path = os.path.join(root_dir, "data", "gitcoinRounds.json")
+
+    with open(file_path, "r", encoding="utf-8") as badges:
+        data = json.load(badges)
+    return data
+
+
 def fetch_handles():
     root_dir = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
