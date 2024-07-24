@@ -13,7 +13,7 @@ def fetch_custom_badges():
     return data
 
 
-def fetch_gitcoin_rounds():
+def fetch_gitcoin_rounds_by_chain():
     root_dir = os.path.dirname(
         os.path.dirname(os.path.abspath(__file__))
     )

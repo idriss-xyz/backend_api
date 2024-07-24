@@ -7,7 +7,7 @@ from utils.constants import PRICING_API_URL, TALLY_QUERY, UNSUPPORTED_0x_NETWORK
 from utils.file_handler import (
     fetch_agora_mock,
     fetch_custom_badges,
-    fetch_gitcoin_rounds,
+    fetch_gitcoin_rounds_by_chain,
     fetch_handles,
     get_status,
 )
@@ -190,7 +190,7 @@ def fetch_gitcoin_rounds():
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type"
         return response
-    data = fetch_gitcoin_rounds()
+    data = fetch_gitcoin_rounds_by_chain()
     response = make_response(data, 200)
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
