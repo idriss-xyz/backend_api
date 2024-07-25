@@ -1,3 +1,19 @@
+"""
+Module for extension-related routes and utilities.
+
+This module defines the Blueprint and routes for various endpoints used in the extension. 
+
+Routes:
+    /service-status (GET): Returns service status of extension addons.
+    /token-price (GET): Retrieves token price based on provided parameters.
+    /fetch-agora (GET): Fetches proposals from the Agora API.
+    /fetch-tally (GET): Fetches proposals from the Tally API based on a Twitter handle.
+    /custom-badges (GET): Fetches custom Twitter badges.
+    /gitcoin-rounds (GET): Fetches Gitcoin rounds data.
+    /dao-twitter-handles (GET): Fetches DAO Twitter handles.
+"""
+
+
 import os
 
 import requests
@@ -39,6 +55,20 @@ def return_service_status():
 @extension_bp.route('/token-price', methods=['GET', 'OPTIONS'])
 @limiter.limit("10 per minute")
 def get_token_price():
+    """
+    Retrieves token price using 0x API.
+
+    Fetches the token price based on the provided sell token, buy token, and sell amount.
+
+    Query Parameters:
+        sellToken (str): The token to sell.
+        buyToken (str): The token to buy.
+        sellAmount (str): The amount of the sell token.
+        network (str): The network ID (default is "1").
+
+    Returns:
+        Response: A JSON response containing the token price or an error message.
+    """
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
@@ -84,6 +114,16 @@ def get_token_price():
 @extension_bp.route('/fetch-agora', methods=["GET", "OPTIONS"])
 @limiter.limit("20 per minute")
 def fetch_agora():
+    """
+    Fetches proposals from the Agora API.
+
+    Query Parameters:
+        limit (int): The number of proposals to retrieve (default is 1).
+        offset (int): The offset for pagination (default is 0).
+
+    Returns:
+        Response: A JSON response containing the Agora data or an error message.
+    """
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
@@ -114,6 +154,16 @@ def fetch_agora():
 @extension_bp.route('/fetch-tally', methods=["GET", "OPTIONS"])
 @limiter.limit("1 per second")
 def fetch_tally():
+    """
+    Fetches data from the Tally API..
+
+    Query Parameters:
+        twitter-name (str): The Twitter handle of the DAO.
+        afterCursor (str, optional): The cursor for pagination.
+
+    Returns:
+        Response: A JSON response containing the Tally data or an error message.
+    """
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
@@ -173,6 +223,12 @@ def fetch_tally():
 
 @extension_bp.route('/custom-badges', methods=["GET", "OPTIONS"])
 def fetch_custom_twitter_badges():
+    """
+    Fetches custom Twitter badges.
+
+    Returns:
+        Response: A JSON response containing custom badges data.
+    """
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
@@ -188,8 +244,6 @@ def fetch_custom_twitter_badges():
 def fetch_gitcoin_rounds():
     """
     Endpoint to fetch Gitcoin rounds data.
-
-    Handles GET requests to retrieve the Gitcoin applications data and OPTIONS requests for CORS preflight.
     
     Returns:
         Response: A JSON response containing the applications data or an error message.
@@ -229,6 +283,12 @@ def fetch_gitcoin_rounds():
 @extension_bp.route('/dao-twitter-handles', methods=["GET", "OPTIONS"])
 @limiter.limit("20 per minute")
 def fetch_dao_handles():
+    """
+    Fetches DAO Twitter handles.
+
+    Returns:
+        Response: A JSON response containing the DAO Twitter handles.
+    """
     if request.method == "OPTIONS":
         response = make_response({"message": "ok"}, 200)
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
