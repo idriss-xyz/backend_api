@@ -1,1 +1,10 @@
-{"chain": ["roundId"]}
+{
+  "arbitrum": {
+    "chainId": 42161,
+    "roundIds": ["23", "24", "25", "26", "27", "28", "29", "31"]
+  },
+  "optimism": {
+    "chainId": 10,
+    "roundIds": ["9", "19"]
+  }
+}

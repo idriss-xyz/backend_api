@@ -11,6 +11,7 @@ from utils.file_handler import (
     fetch_handles,
     get_status,
 )
+from utils.graph_ql import fetch_applications
 from utils.limiter import limiter
 from utils.utils import get_token_router
 
@@ -183,14 +184,43 @@ def fetch_custom_twitter_badges():
     return response
 
 
-@extension_bp.route('/gitcoin-rounds', methods=["GET", "OPTIONS"])
+@extension_bp.route('/gitcoin-rounds', methods=["GET"])
 def fetch_gitcoin_rounds():
-    if request.method == "OPTIONS":
-        response = make_response({"message": "ok"}, 200)
-        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
-        return response
-    data = fetch_gitcoin_rounds_by_chain()
+    """
+    Endpoint to fetch Gitcoin rounds data.
+
+    Handles GET requests to retrieve the Gitcoin applications data and OPTIONS requests for CORS preflight.
+    
+    Returns:
+        Response: A JSON response containing the applications data or an error message.
+    """
+    try:
+        data = fetch_applications()
+        response = make_response(data, 200)
+    except requests.exceptions.RequestException as e:
+        response = make_response(
+            {
+                "error": "Failed to fetch data from Gitcoin GraphQL API",
+                "details": str(e)
+            },
+            502
+        )
+    except KeyError as e:
+        response = make_response(
+            {
+                "error": "Unexpected response structure",
+                "details": str(e)
+            },
+            502
+        )
+    except Exception as e:
+        response = make_response(
+            {
+                "error": "An unexpected error occurred",
+                "details": str(e)
+            },
+            400
+        )
     response = make_response(data, 200)
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
