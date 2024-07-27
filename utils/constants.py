@@ -70,3 +70,7 @@ TALLY_QUERY = """
   }
 }
 """
+
+FALLBACK_IMG_URL = (
+    "https://pbs.twimg.com/profile_images/1712233319411183616/s3skd3R4_400x400.jpg"
+)

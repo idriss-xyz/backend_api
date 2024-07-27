@@ -12,6 +12,7 @@ Routes:
     /gitcoin-rounds (GET): Fetches Gitcoin rounds data.
     /dao-twitter-handles (GET): Fetches DAO Twitter handles.
     /post-data (POST): Validates a provided URL and fetches data from it.
+    /fetch-image (GET): Fetches image from url and converts to base64.
 """
 
 
@@ -21,7 +22,12 @@ import requests
 from flask import Blueprint, make_response, request
 from jsonschema import ValidationError, validate
 
-from utils.constants import PRICING_API_URL, TALLY_QUERY, UNSUPPORTED_0x_NETWORKS
+from utils.constants import (
+    FALLBACK_IMG_URL,
+    PRICING_API_URL,
+    TALLY_QUERY,
+    UNSUPPORTED_0x_NETWORKS,
+)
 from utils.file_handler import (
     fetch_agora_mock,
     fetch_custom_badges,
@@ -304,3 +310,26 @@ def post_page():
     except Exception as e:
         status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
         return create_response({"error": "Unable to process the image"}, status_code)
+    
+
+@extension_bp.route("/fetch-image", methods=["GET"])
+def fetch_image():
+    """
+    Retrieve an image from a specified URL passed via query parameters.
+    If the URL is not provided or an error occurs during the fetch, a fallback image is served.
+    ToDo: Change fallback image based on param.
+
+    Returns:
+        base64 representation of requested image.
+    """
+    image_url = request.args.get("url")
+    if not image_url:
+        return create_response({"error": "No URL provided"}, HTTP_BAD_REQUEST)
+
+    try:
+        return fetch_data(image_url, "blob")
+    except requests.RequestException:
+        return fetch_data(FALLBACK_IMG_URL, "blob")
+
+    except Exception:
+        return fetch_data(FALLBACK_IMG_URL, "blob")
