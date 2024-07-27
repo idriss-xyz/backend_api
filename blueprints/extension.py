@@ -13,6 +13,7 @@ Routes:
     /dao-twitter-handles (GET): Fetches DAO Twitter handles.
     /post-data (POST): Validates a provided URL and fetches data from it.
     /fetch-image (GET): Fetches image from url and converts to base64.
+    /fetch-data (GET): Fetches website data and returns pure html as txt.
 """
 
 
@@ -333,3 +334,27 @@ def fetch_image():
 
     except Exception:
         return fetch_data(FALLBACK_IMG_URL, "blob")
+
+
+@extension_bp.route("/fetch-data", methods=["GET"])
+def fetch_page():
+    """
+    Fetches webpage data as text from a specified URL passed via query parameters.
+    If the URL is not provided or an error occurs, an appropriate error message and status code are returned.
+
+    Returns:
+        Text: Webpage data on successful retrieval.
+        JSON (dict): An error message and a 400 status code if no URL is provided, if applicable.
+        JSON (dict): An error message and the status code associated with the request error, if applicable.
+    """
+    page_url = request.args.get("url")
+    if not page_url:
+        return create_response({"error": "No URL provided"}, HTTP_BAD_REQUEST)
+    try:
+        return fetch_data(page_url, "text")
+    except requests.RequestException as e:
+        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_GATEWAY
+        return create_response({"error": str(e)}, status_code)
+    except Exception:
+        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        return create_response({"error": "Unable to process the image"}, status_code)
