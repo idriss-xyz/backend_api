@@ -24,6 +24,7 @@ from flask import Blueprint, make_response, request
 from jsonschema import ValidationError, validate
 
 from utils.constants import (
+    DONATION_CONTRACT_ADDRESS_PER_CHAIN_ID,
     FALLBACK_IMG_URL,
     PRICING_API_URL,
     TALLY_QUERY,
@@ -228,8 +229,10 @@ def fetch_gitcoin_rounds():
         Response: A JSON response containing the applications data or an error message.
     """
     try:
-        data = fetch_applications()
-        return create_response(data, HTTP_OK)
+        applications = fetch_applications()
+        contracts = DONATION_CONTRACT_ADDRESS_PER_CHAIN_ID
+        response_data = {"applications": applications, "wrapper_contracts": contracts}
+        return create_response(response_data, HTTP_OK)
     except requests.exceptions.RequestException as e:
         return create_response(
             {
