@@ -2,7 +2,11 @@ import base64
 
 import requests
 
-from utils.constants import DEFAULT_NETWORK, TOKEN_ROUTE
+from utils.constants import (
+    DEFAULT_NETWORK,
+    PRIORITY_GITCOIN_ROUNDS_MAPPING,
+    TOKEN_ROUTE,
+)
 from utils.responses import HTTP_NOT_FOUND, HTTP_OK, create_response
 
 
@@ -30,3 +34,18 @@ def fetch_data(url, return_type):
         return create_response({"image": data_url}, HTTP_OK)
     
     return create_response({}, HTTP_NOT_FOUND)
+
+
+def sort_key(application):
+    chain_id = application["chainId"]
+    round_id = application["roundId"]
+    print(chain_id, round_id)
+
+    # Check if the (roundId, chainId) is in the priority_mapping
+    if (round_id, chain_id) in PRIORITY_GITCOIN_ROUNDS_MAPPING:
+        # Return the priority index for priority applications
+        return PRIORITY_GITCOIN_ROUNDS_MAPPING[(round_id, chain_id)]
+    else:
+        # Return a large number for non-priority applications
+        return float('inf')
+    

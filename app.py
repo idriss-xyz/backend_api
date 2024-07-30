@@ -16,10 +16,10 @@ app.register_blueprint(farcaster_bp)
 app.register_blueprint(extension_bp)
 
 
-@app.route('/')
+@app.route("/")
 def hello_world():
     return jsonify(message="Hello, API!")
 
-    
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)

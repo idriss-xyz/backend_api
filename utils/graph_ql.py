@@ -15,18 +15,20 @@ import datetime
 import requests
 
 from utils.file_handler import fetch_gitcoin_rounds_by_chain
+from utils.utils import sort_key
 
-GITCOIN_GRAPHQL_API_URL =  'https://grants-stack-indexer-v2.gitcoin.co/graphql'
+GITCOIN_GRAPHQL_API_URL = "https://grants-stack-indexer-v2.gitcoin.co/graphql"
+
 
 def build_dynamic_query(config):
     """
     Constructs a dynamic GraphQL query for fetching application data from the Gitcoin API.
 
-    This function generates a GraphQL query based on the given configuration which includes 
+    This function generates a GraphQL query based on the given configuration which includes
     details about networks and specific round IDs to fetch.
 
     Args:
-        config (dict): A dictionary containing network identifiers as keys and details about the rounds and chain IDs as values. 
+        config (dict): A dictionary containing network identifiers as keys and details about the rounds and chain IDs as values.
                        Example:
                        {
                            "arbitrum": {
@@ -44,7 +46,7 @@ def build_dynamic_query(config):
     """
     query_parts = []
     for network, details in config.items():
-        rounds_str = ', '.join(f'"{rid}"' for rid in details["roundIds"])
+        rounds_str = ", ".join(f'"{rid}"' for rid in details["roundIds"])
         chain_id = details["chainId"]
         query_part = f"""
         {network}: applications(
@@ -83,13 +85,13 @@ def fetch_applications():
     """
     Fetches application data from the Gitcoin GraphQL API based on configurations.
 
-    This function first retrieves a configuration dict from an external file handler, 
-    constructs a dynamic GraphQL query using this configuration, 
-    and then posts this query to the Gitcoin API. The response is processed to 
+    This function first retrieves a configuration dict from an external file handler,
+    constructs a dynamic GraphQL query using this configuration,
+    and then posts this query to the Gitcoin API. The response is processed to
     combine applications from all specified networks into a single list.
 
     Returns:
-        list: A list of combined application data from all specified networks in the configuration. 
+        list: A list of combined application data from all specified networks in the configuration.
         Each entry in the list is a dictionary containing details about the application and associated project.
 
     Raises:
@@ -101,14 +103,25 @@ def fetch_applications():
     response = requests.post(
         GITCOIN_GRAPHQL_API_URL,
         json={
-            'query': query,
-            'operationName': 'Applications',
-            'variables': {'currentIsoDate': current_iso_date},
+            "query": query,
+            "operationName": "Applications",
+            "variables": {"currentIsoDate": current_iso_date},
         },
-        headers={'Content-Type': 'application/json'}
+        headers={"Content-Type": "application/json"},
+        timeout=10,
     )
-    data = response.json()['data']
+    data = response.json()["data"]
     combined_applications = []
     for network in config.keys():
         combined_applications.extend(data.get(network, []))
-    return combined_applications
+    sorted_applications = sorted(
+        (
+            appl
+            for appl in combined_applications
+            if appl.get("project")
+            and appl["project"].get("metadata")
+            and appl["project"]["metadata"].get("projectTwitter")
+        ),
+        key=sort_key,
+    )
+    return sorted_applications
