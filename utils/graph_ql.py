@@ -99,7 +99,9 @@ def fetch_applications():
     """
     config = fetch_gitcoin_rounds_by_chain()
     current_iso_date = datetime.datetime.now().isoformat()
+    print(current_iso_date)
     query = build_dynamic_query(config)
+    print(query)
     response = requests.post(
         GITCOIN_GRAPHQL_API_URL,
         json={
@@ -124,4 +126,64 @@ def fetch_applications():
         ),
         key=sort_key,
     )
+    mock_application = {
+        "roundId": "19",
+        "chainId": 10,
+        "project": {
+            "id": "0x0000000000000000000000000000000000000000",
+            "name": "IDriss_xyz",
+            "anchorAddress": "0x0000000000000000000000000000000000000000",
+            "registryAddress": "0x0000000000000000000000000000000000000000",
+            "metadata": {
+                "projectTwitter": "IDriss_xyz",
+            },
+        }
+    }
+
+    sorted_applications.append(mock_application)
+
+    # List to store applications that do not fulfill the criteria
+    invalid_applications = []
+
+    # Filter and sort the applications array using the sort_key function, with error handling
+    def is_valid_application(app):
+        try:
+            # Check for project, metadata, and projectTwitter
+            if app.get("project") and app["project"].get("metadata") and app["project"]["metadata"].get("projectTwitter"):
+                return True
+        except (KeyError, TypeError):
+            pass
+        return False
+
+    # Separate valid and invalid applications
+    for app in combined_applications:
+        if is_valid_application(app):
+            continue
+        else:
+            invalid_applications.append(app)
+
+    # Print the invalid applications
+    print("Invalid Applications:")
+    for invalid_app in invalid_applications:
+        print(invalid_app)
     return sorted_applications
+
+
+
+# {
+#     "roundId": "23",
+#     "chainId": 42161,
+#     "project": {
+#         "id": "0xc490fadc446f7dd96ecebccf74c177ad927b26e435f7127fbc9f9a331b31769b",
+#         "name": "chatWallet",
+#         "metadata": {
+#         "type": "project",
+#         "canonical": {
+#             "chainId": 43114,
+#             "registryAddress": "0x4aacca72145e1df2aec137e1f3c5e3d75db8b5f3"
+#         }
+#         },
+#         "anchorAddress": "0xa89f911aad3e90ac4b2855665374732bc1d58966",
+#         "registryAddress": "0x4aacca72145e1df2aec137e1f3c5e3d75db8b5f3"
+#     }
+# }

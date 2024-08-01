@@ -39,13 +39,9 @@ def fetch_data(url, return_type):
 def sort_key(application):
     chain_id = application["chainId"]
     round_id = application["roundId"]
-    print(chain_id, round_id)
 
-    # Check if the (roundId, chainId) is in the priority_mapping
     if (round_id, chain_id) in PRIORITY_GITCOIN_ROUNDS_MAPPING:
-        # Return the priority index for priority applications
         return PRIORITY_GITCOIN_ROUNDS_MAPPING[(round_id, chain_id)]
     else:
-        # Return a large number for non-priority applications
         return float('inf')
     
