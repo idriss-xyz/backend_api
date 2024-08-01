@@ -29,12 +29,7 @@ from utils.constants import (
     TALLY_QUERY,
     UNSUPPORTED_0x_NETWORKS,
 )
-from utils.file_handler import (
-    fetch_agora_mock,
-    fetch_custom_badges,
-    fetch_handles,
-    get_status,
-)
+from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
 from utils.graph_ql import fetch_applications
 from utils.limiter import limiter
 from utils.responses import (
