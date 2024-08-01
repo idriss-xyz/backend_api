@@ -130,17 +130,13 @@ def fetch_agora():
     
     limit = request.args.get("limit", 1)
     offset = request.args.get("offset", 0)
-    url = f'https://vote.optimism.io/api/v1/proposals?limit=${limit}&offset=${offset}'
-    headers = {"bearerAuth ": os.getenv("API_KEY_AGORA")}
+    url = f'https://vote.optimism.io/api/v1/proposals?limit={limit}&offset={offset}'
+    headers = {"Authorization": os.getenv("API_KEY_AGORA")}
 
     try:
-        # api_response = requests.get(url, headers=headers, timeout=10)
-        # api_response.raise_for_status()
-        # response = make_response(api_response.json(), api_response.status_code)
-        ## MOCK START
-        api_response = fetch_agora_mock()
-        return create_response(api_response, HTTP_OK)
-        ## MOCK END
+        api_response = requests.get(url, headers=headers, timeout=10)
+        api_response.raise_for_status()
+        return create_response(api_response.json(), api_response.status_code)
     except requests.RequestException as e:
         status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
         return create_response({"error": str(e)}, status_code)
