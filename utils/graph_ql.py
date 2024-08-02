@@ -126,21 +126,6 @@ def fetch_applications():
         ),
         key=sort_key,
     )
-    mock_application = {
-        "roundId": "19",
-        "chainId": 10,
-        "project": {
-            "id": "0x281825e4cd35319bc644008fa8fbd58879464d9d5a114fd2dfd524e00e7b415f",
-            "name": "IDriss_xyz",
-            "anchorAddress": "0xf8590ccb6c0d7069f61e397beeb7c0f931b6fc0d",
-            "registryAddress": "0x4aacca72145e1df2aec137e1f3c5e3d75db8b5f3",
-            "metadata": {
-                "projectTwitter": "IDriss_xyz",
-            },
-        }
-    }
-
-    sorted_applications.append(mock_application)
 
     # List to store applications that do not fulfill the criteria
     invalid_applications = []
