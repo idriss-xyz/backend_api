@@ -81,6 +81,47 @@ def build_dynamic_query(config):
     """
 
 
+def is_valid_application(application):
+    """
+    Validates an application by checking for the presence of essential fields.
+
+    Args:
+        application (dict): The application dictionary to validate.
+
+    Returns:
+        bool: True if the application contains a valid project with metadata and a
+        `projectTwitter` field, otherwise False.
+    """
+    try:
+        if application.get("project") and application["project"].get("metadata") and application["project"]["metadata"].get("projectTwitter"):
+            return True
+    except (KeyError, TypeError):
+        pass
+    return False
+
+
+def mutate_application(application):
+    """
+    Mutates an application by updating its metadata if it references a canonical project.
+
+    Args:
+        application (dict): The application dictionary to mutate.
+
+    Returns:
+        dict: The mutated application dictionary with updated metadata if applicable.
+    """
+    try:
+        project = application.get('project')
+        if project and 'canonical' in project.get('metadata', {}) and 'canonicalProject' in application:
+            canonical_project = application['canonicalProject']
+            if 'metadata' in canonical_project:
+                project['metadata'] = canonical_project['metadata']
+        application.pop('canonicalProject', None)
+        return application
+    except KeyError:
+        return application
+
+
 def fetch_applications():
     """
     Fetches application data from the Gitcoin GraphQL API based on configurations.
@@ -99,9 +140,7 @@ def fetch_applications():
     """
     config = fetch_gitcoin_rounds_by_chain()
     current_iso_date = datetime.datetime.now().isoformat()
-    print(current_iso_date)
     query = build_dynamic_query(config)
-    print(query)
     response = requests.post(
         GITCOIN_GRAPHQL_API_URL,
         json={
@@ -116,6 +155,9 @@ def fetch_applications():
     combined_applications = []
     for network in config.keys():
         combined_applications.extend(data.get(network, []))
+
+    combined_applications = [mutate_application(appl) for appl in combined_applications]
+    
     sorted_applications = sorted(
         (
             appl
@@ -126,49 +168,4 @@ def fetch_applications():
         ),
         key=sort_key,
     )
-
-    # List to store applications that do not fulfill the criteria
-    invalid_applications = []
-
-    # Filter and sort the applications array using the sort_key function, with error handling
-    def is_valid_application(app):
-        try:
-            # Check for project, metadata, and projectTwitter
-            if app.get("project") and app["project"].get("metadata") and app["project"]["metadata"].get("projectTwitter"):
-                return True
-        except (KeyError, TypeError):
-            pass
-        return False
-
-    # Separate valid and invalid applications
-    for app in combined_applications:
-        if is_valid_application(app):
-            continue
-        else:
-            invalid_applications.append(app)
-
-    # Print the invalid applications
-    print("Invalid Applications:")
-    for invalid_app in invalid_applications:
-        print(invalid_app)
     return sorted_applications
-
-
-
-# {
-#     "roundId": "23",
-#     "chainId": 42161,
-#     "project": {
-#         "id": "0xc490fadc446f7dd96ecebccf74c177ad927b26e435f7127fbc9f9a331b31769b",
-#         "name": "chatWallet",
-#         "metadata": {
-#         "type": "project",
-#         "canonical": {
-#             "chainId": 43114,
-#             "registryAddress": "0x4aacca72145e1df2aec137e1f3c5e3d75db8b5f3"
-#         }
-#         },
-#         "anchorAddress": "0xa89f911aad3e90ac4b2855665374732bc1d58966",
-#         "registryAddress": "0x4aacca72145e1df2aec137e1f3c5e3d75db8b5f3"
-#     }
-# }
