@@ -1,8 +1,8 @@
 {
-    "gitcoin": true,
+    "gitcoin": false,
     "polymarket": true,
     "snapshot": true,
     "idriss-send": true,
-    "agora": false,
+    "agora": true,
     "tally": true
 }
