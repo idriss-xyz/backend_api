@@ -71,6 +71,9 @@ def build_dynamic_query(config):
                 anchorAddress
                 registryAddress
             }}
+            canonicalProject {{
+                metadata
+            }}
         }}
         """
         query_parts.append(query_part)

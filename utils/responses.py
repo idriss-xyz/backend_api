@@ -1,4 +1,4 @@
-from flask import make_response
+from flask import jsonify, make_response
 
 HTTP_OK = 200
 HTTP_BAD_REQUEST = 400
@@ -10,13 +10,15 @@ def create_response(data, status_code=HTTP_OK):
     Creates a Flask response with the given data and status code.
 
     Args:
-        data (dict): The response data.
+        data (dict or list): The response data.
         status_code (int): The HTTP status code.
 
     Returns:
         Response: The Flask response object.
     """
-    response = make_response(data, status_code)
+    json_data = jsonify(data)
+
+    response = make_response(json_data, status_code)
     response.headers["Content-Type"] = "application/json"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
