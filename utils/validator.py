@@ -5,8 +5,8 @@ URL_SCHEMA = {
             "type": "string",
             "anyOf": [
                 {"pattern": r"^https://across\.to/api/suggested-fees\?.*"},
-            ]
+            ],
         }
     },
-    "required": ["url"]
+    "required": ["url"],
 }

@@ -23,16 +23,16 @@ def fetch_data(url, return_type):
 
     if return_type == "json":
         return create_response(response.json(), HTTP_OK)
-    
+
     if return_type == "text":
         return create_response({"text": response.text}, HTTP_OK)
-    
+
     if return_type == "blob":
         content_type = response.headers.get("content-type", "image/jpeg")
         img_base64 = base64.b64encode(response.content).decode()
         data_url = f"data:{content_type};base64,{img_base64}"
         return create_response({"image": data_url}, HTTP_OK)
-    
+
     return create_response({}, HTTP_NOT_FOUND)
 
 
@@ -43,5 +43,4 @@ def sort_key(application):
     if (round_id, chain_id) in PRIORITY_GITCOIN_ROUNDS_MAPPING:
         return PRIORITY_GITCOIN_ROUNDS_MAPPING[(round_id, chain_id)]
     else:
-        return float('inf')
-    
+        return float("inf")

@@ -1,8 +1,8 @@
 """
 Utility functions for interacting with the Gitcoin GraphQL API.
 
-This module contains functions for constructing dynamic GraphQL queries 
-based on configuration files that specify which networks and rounds to fetch 
+This module contains functions for constructing dynamic GraphQL queries
+based on configuration files that specify which networks and rounds to fetch
 applications from.
 
 Functions:
@@ -28,7 +28,8 @@ def build_dynamic_query(config):
     details about networks and specific round IDs to fetch.
 
     Args:
-        config (dict): A dictionary containing network identifiers as keys and details about the rounds and chain IDs as values.
+        config (dict): A dictionary containing network identifiers as keys
+                       and details about the rounds and chain IDs as values.
                        Example:
                        {
                            "arbitrum": {
@@ -96,7 +97,11 @@ def is_valid_application(application):
         `projectTwitter` field, otherwise False.
     """
     try:
-        if application.get("project") and application["project"].get("metadata") and application["project"]["metadata"].get("projectTwitter"):
+        if (
+            application.get("project")
+            and application["project"].get("metadata")
+            and application["project"]["metadata"].get("projectTwitter")
+        ):
             return True
     except (KeyError, TypeError):
         pass
@@ -114,12 +119,16 @@ def mutate_application(application):
         dict: The mutated application dictionary with updated metadata if applicable.
     """
     try:
-        project = application.get('project')
-        if project and 'canonical' in project.get('metadata', {}) and 'canonicalProject' in application:
-            canonical_project = application['canonicalProject']
-            if 'metadata' in canonical_project:
-                project['metadata'] = canonical_project['metadata']
-        application.pop('canonicalProject', None)
+        project = application.get("project")
+        if (
+            project
+            and "canonical" in project.get("metadata", {})
+            and "canonicalProject" in application
+        ):
+            canonical_project = application["canonicalProject"]
+            if "metadata" in canonical_project:
+                project["metadata"] = canonical_project["metadata"]
+        application.pop("canonicalProject", None)
         return application
     except KeyError:
         return application
@@ -160,7 +169,7 @@ def fetch_applications():
         combined_applications.extend(data.get(network, []))
 
     combined_applications = [mutate_application(appl) for appl in combined_applications]
-    
+
     sorted_applications = sorted(
         (
             appl

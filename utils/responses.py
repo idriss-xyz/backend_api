@@ -5,6 +5,7 @@ HTTP_BAD_REQUEST = 400
 HTTP_NOT_FOUND = 404
 HTTP_BAD_GATEWAY = 502
 
+
 def create_response(data, status_code=HTTP_OK):
     """
     Creates a Flask response with the given data and status code.
@@ -22,6 +23,7 @@ def create_response(data, status_code=HTTP_OK):
     response.headers["Content-Type"] = "application/json"
     response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     return response
+
 
 def handle_options_request(methods="GET, OPTIONS"):
     """

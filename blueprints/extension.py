@@ -16,7 +16,6 @@ Routes:
     /fetch-data (GET): Fetches website data and returns pure html as txt.
 """
 
-
 import os
 
 import requests
@@ -44,6 +43,7 @@ from utils.validator import URL_SCHEMA
 
 extension_bp = Blueprint("extension", __name__)
 
+
 @extension_bp.route("/service-status", methods=["GET", "OPTIONS"])
 def return_service_status():
     """
@@ -54,12 +54,12 @@ def return_service_status():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
+
     status = get_status()
     return status, 200
 
 
-@extension_bp.route('/token-price', methods=['GET', 'OPTIONS'])
+@extension_bp.route("/token-price", methods=["GET", "OPTIONS"])
 @limiter.limit("10 per minute")
 def get_token_price():
     """
@@ -78,36 +78,49 @@ def get_token_price():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
+
     sell_token = request.args.get("sellToken")
     buy_token = request.args.get("buyToken")
     sell_amount = request.args.get("sellAmount")
     network = request.args.get("network", "1")
 
     if not sell_token or not buy_token or not sell_amount:
-        return create_response({"error": "Missing required parameters"}, HTTP_BAD_REQUEST)
-    
+        return create_response(
+            {"error": "Missing required parameters"}, HTTP_BAD_REQUEST
+        )
+
     if network in UNSUPPORTED_0x_NETWORKS:
         try:
-            network, buy_token, sell_token = get_token_router(network, buy_token, sell_token)
-        except KeyError:
-            status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+            network, buy_token, sell_token = get_token_router(
+                network, buy_token, sell_token
+            )
+        except KeyError as e:
+            status_code = (
+                e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+            )
             return create_response({"error": "Token pair not supported"}, status_code)
 
     api_key = os.getenv("API_KEY_0X")
-    url = f"{PRICING_API_URL[network]}/swap/v1/price?sellToken={sell_token}&buyToken={buy_token}&sellAmount={sell_amount}"
+    url = (
+        f"{PRICING_API_URL[network]}/swap/v1/price"
+        f"?sellToken={sell_token}"
+        f"&buyToken={buy_token}"
+        f"&sellAmount={sell_amount}"
+    )
     headers = {"0x-api-key": api_key}
 
     try:
         api_response = requests.get(url, headers=headers, timeout=10)
-        api_response.raise_for_status() 
+        api_response.raise_for_status()
         return create_response(api_response.json(), api_response.status_code)
     except requests.RequestException as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": str(e)}, status_code)
 
 
-@extension_bp.route('/fetch-agora', methods=["GET", "OPTIONS"])
+@extension_bp.route("/fetch-agora", methods=["GET", "OPTIONS"])
 @limiter.limit("20 per minute")
 def fetch_agora():
     """
@@ -122,10 +135,10 @@ def fetch_agora():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
+
     limit = request.args.get("limit", 1)
     offset = request.args.get("offset", 0)
-    url = f'https://vote.optimism.io/api/v1/proposals?limit={limit}&offset={offset}'
+    url = f"https://vote.optimism.io/api/v1/proposals?limit={limit}&offset={offset}"
     headers = {"Authorization": os.getenv("API_KEY_AGORA")}
 
     try:
@@ -133,11 +146,13 @@ def fetch_agora():
         api_response.raise_for_status()
         return create_response(api_response.json(), api_response.status_code)
     except requests.RequestException as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": str(e)}, status_code)
 
 
-@extension_bp.route('/fetch-tally', methods=["GET", "OPTIONS"])
+@extension_bp.route("/fetch-tally", methods=["GET", "OPTIONS"])
 @limiter.limit("1 per second")
 def fetch_tally():
     """
@@ -152,32 +167,33 @@ def fetch_tally():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
-    twitter_name = request.args.get('twitter-name')
-    after_cursor = request.args.get('afterCursor')
-    
+
+    twitter_name = request.args.get("twitter-name")
+    after_cursor = request.args.get("afterCursor")
+
     if not twitter_name:
-        return create_response({"error": "Missing required parameter: twitter-name."}, HTTP_BAD_REQUEST)
+        return create_response(
+            {"error": "Missing required parameter: twitter-name."}, HTTP_BAD_REQUEST
+        )
 
     twitter_name = twitter_name.replace("@", "").lower()
 
     handles = fetch_handles()
 
-    tally_organization_id = handles['tally'].get(twitter_name)
+    tally_organization_id = handles["tally"].get(twitter_name)
     if not tally_organization_id:
-        return create_response({"error": "No DAO associated with this handle."}, HTTP_BAD_REQUEST)
-    
-    url = 'https://api.tally.xyz/query'
+        return create_response(
+            {"error": "No DAO associated with this handle."}, HTTP_BAD_REQUEST
+        )
+
+    url = "https://api.tally.xyz/query"
     variables = {
         "input": {
             "filters": {
                 "includeArchived": False,
-                "organizationId": tally_organization_id
+                "organizationId": tally_organization_id,
             },
-            "page": {
-                "limit": 2,
-                "afterCursor": after_cursor
-            }
+            "page": {"limit": 2, "afterCursor": after_cursor},
         }
     }
     data = {"operationName": "Proposals", "query": TALLY_QUERY, "variables": variables}
@@ -188,14 +204,18 @@ def fetch_tally():
         api_response.raise_for_status()
         response_json = api_response.json()
         if "proposals" in response_json["data"]:
-            response_json["data"]["proposalsV2"] = response_json["data"].pop("proposals")
+            response_json["data"]["proposalsV2"] = response_json["data"].pop(
+                "proposals"
+            )
         return create_response(response_json, api_response.status_code)
     except requests.RequestException as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": str(e)}, status_code)
 
 
-@extension_bp.route('/custom-badges', methods=["GET", "OPTIONS"])
+@extension_bp.route("/custom-badges", methods=["GET", "OPTIONS"])
 def fetch_custom_twitter_badges():
     """
     Fetches custom Twitter badges.
@@ -205,16 +225,16 @@ def fetch_custom_twitter_badges():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
+
     data = fetch_custom_badges()
     return create_response(data, HTTP_OK)
 
 
-@extension_bp.route('/gitcoin-rounds', methods=["GET"])
+@extension_bp.route("/gitcoin-rounds", methods=["GET"])
 def fetch_gitcoin_rounds():
     """
     Endpoint to fetch Gitcoin rounds data.
-    
+
     Returns:
         Response: A JSON response containing the applications data or an error message.
     """
@@ -225,29 +245,23 @@ def fetch_gitcoin_rounds():
         return create_response(
             {
                 "error": "Failed to fetch data from Gitcoin GraphQL API",
-                "details": str(e)
+                "details": str(e),
             },
-            HTTP_BAD_GATEWAY
+            HTTP_BAD_GATEWAY,
         )
     except KeyError as e:
         return create_response(
-            {
-                "error": "Unexpected response structure",
-                "details": str(e)
-            },
-            HTTP_BAD_GATEWAY
+            {"error": "Unexpected response structure", "details": str(e)},
+            HTTP_BAD_GATEWAY,
         )
     except Exception as e:
         return create_response(
-            {
-                "error": "An unexpected error occurred",
-                "details": str(e)
-            },
-            HTTP_BAD_REQUEST
+            {"error": "An unexpected error occurred", "details": str(e)},
+            HTTP_BAD_REQUEST,
         )
 
 
-@extension_bp.route('/dao-twitter-handles', methods=["GET", "OPTIONS"])
+@extension_bp.route("/dao-twitter-handles", methods=["GET", "OPTIONS"])
 @limiter.limit("20 per minute")
 def fetch_dao_handles():
     """
@@ -258,7 +272,7 @@ def fetch_dao_handles():
     """
     if request.method == "OPTIONS":
         return handle_options_request()
-    
+
     data = fetch_handles()
     return create_response(data, HTTP_OK)
 
@@ -280,29 +294,36 @@ def post_page():
 
     Example JSON Request Body:
     {
-        "url": "https://across.to/api/suggested-fees?originChainId=1&token=0x123...&amount=1000000000&message=example&recipient=0xabc...&destinationChainId=2"
+        "url": "https://across.to/api/suggested-fees?
+        originChainId=1&token=0x123...&amount=...&message=...&recipient=...&destinationChainId=1"
     }
     """
     if request.method == "OPTIONS":
         return create_response("POST, OPTIONS")
-    
+
     request_data = request.get_json()
     try:
         validate(instance=request_data, schema=URL_SCHEMA)
     except ValidationError as e:
-        return create_response({"error": f"Invalid input: {e.message}"}, HTTP_BAD_REQUEST)  
+        return create_response(
+            {"error": f"Invalid input: {e.message}"}, HTTP_BAD_REQUEST
+        )
     page_url = request_data.get("url")
     if not page_url:
         return create_response({"error": "No URL provided"}, HTTP_BAD_REQUEST)
     try:
         return fetch_data(page_url, "json")
     except requests.RequestException as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": str(e)}, status_code)
     except Exception as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": "Unable to process the image"}, status_code)
-    
+
 
 @extension_bp.route("/fetch-image", methods=["GET"])
 def fetch_image():
@@ -344,8 +365,12 @@ def fetch_page():
     try:
         return fetch_data(page_url, "text")
     except requests.RequestException as e:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_GATEWAY
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_GATEWAY
+        )
         return create_response({"error": str(e)}, status_code)
-    except Exception:
-        status_code = e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+    except Exception as e:
+        status_code = (
+            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
+        )
         return create_response({"error": "Unable to process the image"}, status_code)
