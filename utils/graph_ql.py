@@ -171,13 +171,7 @@ def fetch_applications():
     combined_applications = [mutate_application(appl) for appl in combined_applications]
 
     sorted_applications = sorted(
-        (
-            appl
-            for appl in combined_applications
-            if appl.get("project")
-            and appl["project"].get("metadata")
-            and appl["project"]["metadata"].get("projectTwitter")
-        ),
+        (appl for appl in combined_applications if is_valid_application(appl)),
         key=sort_key,
     )
     return sorted_applications

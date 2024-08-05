@@ -5,6 +5,6 @@
   },
   "optimism": {
     "chainId": 10,
-    "roundIds": ["44", "57", "19"]
+    "roundIds": ["44", "57"]
   }
 }
