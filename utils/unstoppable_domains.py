@@ -11,6 +11,7 @@ def get_unstoppable_domain_owner(domain):
             "accept": "application/json",
             "authorization": f'Bearer {os.getenv("UD_API_KEY")}',
         },
+        timeout=10,
     )
     response.raise_for_status()
     return response.json()

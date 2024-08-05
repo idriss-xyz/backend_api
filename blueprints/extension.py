@@ -1,7 +1,7 @@
 """
 Module for extension-related routes and utilities.
 
-This module defines the Blueprint and routes for various endpoints used in the extension. 
+This module defines the Blueprint and routes for various endpoints used in the extension.
 
 Routes:
     /service-status (GET): Returns service status of extension addons.
@@ -30,6 +30,7 @@ from utils.constants import (
 )
 from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
 from utils.graph_ql import fetch_applications
+from utils.helper import fetch_data, get_token_router
 from utils.limiter import limiter
 from utils.responses import (
     HTTP_BAD_GATEWAY,
@@ -38,7 +39,6 @@ from utils.responses import (
     create_response,
     handle_options_request,
 )
-from utils.utils import fetch_data, get_token_router
 from utils.validator import URL_SCHEMA
 
 extension_bp = Blueprint("extension", __name__)
