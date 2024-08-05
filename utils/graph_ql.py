@@ -15,7 +15,7 @@ import datetime
 import requests
 
 from utils.file_handler import fetch_gitcoin_rounds_by_chain
-from utils.utils import sort_key
+from utils.helper import sort_key
 
 GITCOIN_GRAPHQL_API_URL = "https://grants-stack-indexer-v2.gitcoin.co/graphql"
 
