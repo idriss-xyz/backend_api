@@ -22,15 +22,10 @@ import requests
 from flask import Blueprint, request
 from jsonschema import ValidationError, validate
 
-from utils.constants import (
-    FALLBACK_IMG_URL,
-    PRICING_API_URL,
-    TALLY_QUERY,
-    UNSUPPORTED_0x_NETWORKS,
-)
+from utils.constants import FALLBACK_IMG_URL, TALLY_QUERY
 from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
 from utils.graph_ql import fetch_applications
-from utils.helper import fetch_data, get_token_router
+from utils.helper import fetch_data
 from utils.limiter import limiter
 from utils.responses import (
     HTTP_BAD_GATEWAY,
@@ -38,6 +33,11 @@ from utils.responses import (
     HTTP_OK,
     create_response,
     handle_options_request,
+)
+from utils.token_prices import (
+    get_0x_token_pricing,
+    get_alternative_token_price,
+    needs_alternative_pricing_route,
 )
 from utils.validator import URL_SCHEMA
 
@@ -89,35 +89,10 @@ def get_token_price():
             {"error": "Missing required parameters"}, HTTP_BAD_REQUEST
         )
 
-    if network in UNSUPPORTED_0x_NETWORKS:
-        try:
-            network, buy_token, sell_token = get_token_router(
-                network, buy_token, sell_token
-            )
-        except KeyError as e:
-            status_code = (
-                e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
-            )
-            return create_response({"error": "Token pair not supported"}, status_code)
+    if needs_alternative_pricing_route(network, sell_token, buy_token):
+        return get_alternative_token_price(network, sell_token, buy_token, sell_amount)
 
-    api_key = os.getenv("API_KEY_0X")
-    url = (
-        f"{PRICING_API_URL[network]}/swap/v1/price"
-        f"?sellToken={sell_token}"
-        f"&buyToken={buy_token}"
-        f"&sellAmount={sell_amount}"
-    )
-    headers = {"0x-api-key": api_key}
-
-    try:
-        api_response = requests.get(url, headers=headers, timeout=10)
-        api_response.raise_for_status()
-        return create_response(api_response.json(), api_response.status_code)
-    except requests.RequestException as e:
-        status_code = (
-            e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
-        )
-        return create_response({"error": str(e)}, status_code)
+    return get_0x_token_pricing(network, sell_token, buy_token, sell_amount)
 
 
 @extension_bp.route("/fetch-agora", methods=["GET", "OPTIONS"])
