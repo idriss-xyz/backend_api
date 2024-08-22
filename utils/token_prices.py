@@ -58,7 +58,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         print(latest_data)
         print(sell_amount)
         total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": total_amount}
+        return {"price": latest_data, "total_amount": total_amount}
 
 
 def needs_alternative_pricing_route(network, sell_token, buy_token):
