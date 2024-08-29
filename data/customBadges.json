@@ -1096,26 +1096,6 @@
             "iconType": "default"
         }
     },
-    "1013151066299478016": {
-        "walletAddress": "0x974fDBc4Ff3Ae73Ceeba5B4c85521F2638ee54e5",
-        "availableNetworks": [
-            41455,
-            10,
-            8453,
-            5000,
-            534352,
-            137,
-            1,
-            56,
-            324,
-            59144
-        ],
-        "sendWidgetOverrides": {
-            "headerCopy": "Send to @Aleph__Zero",
-            "sendButtonCopy": "Send",
-            "iconType": "default"
-        }
-    },
     "1286844247388364800": {
         "walletAddress": "0x310c52334a0cdB26B0d2e12b995e66D3210c0eEF",
         "availableNetworks": [
