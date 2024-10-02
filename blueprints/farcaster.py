@@ -1,7 +1,7 @@
 import requests
 from flask import Blueprint, jsonify, request
 
-from utils.farcaster import get_farcaster_verified_addresses
+from utils.farcaster import get_farcaster_link, get_farcaster_verified_addresses
 
 farcaster_bp = Blueprint("fc", __name__)
 
@@ -15,6 +15,21 @@ def get_fc_connected_addresses():
 
     try:
         response = get_farcaster_verified_addresses(fid)
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 400
+
+    return jsonify(response), 200
+
+
+@farcaster_bp.route("/get-link", methods=["GET"])
+def get_fc_link():
+    fid = request.args.get("fid")
+
+    if not fid:
+        return jsonify({"error": "Missing fid parameter"}), 400
+
+    try:
+        response = get_farcaster_link(fid)
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
 
