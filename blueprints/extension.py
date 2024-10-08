@@ -24,7 +24,7 @@ from jsonschema import ValidationError, validate
 
 from utils.constants import FALLBACK_IMG_URL, TALLY_QUERY
 from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
-from utils.graph_ql import fetch_applications
+from utils.graph_ql.gc_applications import fetch_applications
 from utils.helper import fetch_data
 from utils.limiter import limiter
 from utils.responses import (
