@@ -4,9 +4,7 @@ from datetime import datetime
 import requests
 from flask import Blueprint, jsonify, request
 
-from cache.redis_fc import redis_fc
-from cache.utils import cache_get_all_followers, cache_get_follower
-from utils.farcaster import update_follower
+from database.utils import get_follower
 from utils.graph_ql.fc_connected_addresses import get_farcaster_verified_addresses
 
 farcaster_bp = Blueprint("fc", __name__)
@@ -52,7 +50,7 @@ def get_fc_link():
     if not account:
         return jsonify({"error": "Missing name parameter"}), 400
 
-    follower_data = cache_get_follower(account)
+    follower_data = get_follower(account)
 
     try:
         return jsonify(follower_data), 200
@@ -67,7 +65,7 @@ def get_all_fc_links():
     Endpoint to fetch followers information.
     """
 
-    follower_data = cache_get_all_followers()
+    follower_data = get_follower()
 
     try:
         return jsonify(follower_data), 200
@@ -75,18 +73,3 @@ def get_all_fc_links():
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
     
-
-@farcaster_bp.route("/update-fc-follower", methods=["GET"])
-def update_fc_follower():
-    """
-    Endpoint to update the followers of @idriss on farcaster.
-    This endpoint will be called periodically to update the cache.
-    """
-    try:
-        follower_data = update_follower()
-        redis_fc.set("followers", json.dumps(follower_data), ex=600)
-
-        return jsonify({"status": "Follower accounts updated", "accounts": follower_data}), 200
-
-    except requests.RequestException as e:
-        return jsonify({"error": str(e)}), 400

@@ -40,33 +40,3 @@ def get_farcaster_verified_addresses(fc_name):
     response.raise_for_status()
     data = response.json()["data"]
     return data
-
-
-def get_follower(cursor=""):
-    """
-    Fetches followers of @idriss farcaster account from Airstack.
-    
-    Args:
-        cursor (str): Next page cursor.
-
-    Returns:
-        dict: Account name to wallet address mapping.
-    """
-    if not AIRSTACK_API_KEY:
-        raise ValueError("AIRSTACK_API_KEY not set")
-
-    headers = {
-        "Authorization": AIRSTACK_API_KEY,
-        "Content-Type": "application/json"
-    }
-
-    response = requests.post(
-        AIRSTACK_API_URL,
-        json={"query": FOLLOWER_QUERY, "operation_name": "MyQuery", "variables": {"cursor": cursor}},
-        headers=headers,
-        timeout=10
-    )
-
-    response.raise_for_status()
-    data = response.json()["data"]
-    return data
