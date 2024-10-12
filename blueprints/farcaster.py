@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 import requests
@@ -28,15 +27,17 @@ def get_fc_connected_addresses():
             return jsonify({"error": "FID not found"}), 404
         freshest_evm_address = max(
             (addr for addr in addresses if addr.get("address", "").startswith("0x")),
-            key=lambda addr: datetime.fromisoformat(addr["timestamp"].replace("Z", "+00:00")),
-            default=None
+            key=lambda addr: datetime.fromisoformat(
+                addr["timestamp"].replace("Z", "+00:00")
+            ),
+            default=None,
         )
         if freshest_evm_address is None:
             return jsonify({"address": None, "fid": fid}), 200
         return jsonify({"address": freshest_evm_address["address"], "fid": fid}), 200
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
-    except (KeyError, TypeError) as e:
+    except (KeyError, TypeError):
         return jsonify({"error": "Invalid response structure"}), 400
 
 
@@ -57,7 +58,7 @@ def get_fc_link():
 
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
-    
+
 
 @farcaster_bp.route("/get-links", methods=["GET"])
 def get_all_fc_links():
@@ -72,4 +73,3 @@ def get_all_fc_links():
 
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
-    

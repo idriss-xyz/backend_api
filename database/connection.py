@@ -12,29 +12,29 @@ hostname = result.hostname
 port = result.port
 
 
-def create_table(conn):
-    cur = conn.cursor()
+def create_table(connection):
+    cur = connection.cursor()
 
     # Create the table for storing followers as JSON
-    cur.execute("""
+    cur.execute(
+        """
         CREATE TABLE IF NOT EXISTS followers (
             id SERIAL PRIMARY KEY,
             follower_data jsonb
         )
-    """)
+    """
+    )
 
-    conn.commit()
+    connection.commit()
     cur.close()
-    conn.close()
+    connection.close()
+
 
 def get_db_connection():
     return psycopg2.connect(
-        dbname=database,
-        user=username,
-        password=password,
-        host=hostname,
-        port=port
+        dbname=database, user=username, password=password, host=hostname, port=port
     )
+
 
 conn = get_db_connection()
 

@@ -1,7 +1,12 @@
 VERIFIED_ADDRESSES_QUERY = """
   query GetMostRecentVerifiedAddresses($fc_name: String!) {
   Socials(
-    input: {filter: {profileName: {_eq: $fc_name}, dappName: {_eq: farcaster}}, blockchain: ethereum, order: {updatedAt: ASC}, limit: 10}
+    input: {filter:
+              {profileName: {_eq: $fc_name}, dappName: {_eq: farcaster}},
+              blockchain: ethereum,
+              order: {updatedAt: ASC},
+              limit: 10
+            }
   ) {
     Social {
       profileName
@@ -18,7 +23,11 @@ VERIFIED_ADDRESSES_QUERY = """
 
 FOLLOWER_QUERY = """query MyQuery($cursor: String!) {
   SocialFollowers(
-    input: {filter: {dappName: {_eq: farcaster}, identity: {_eq: "fc_fname:idriss"}}, blockchain: ALL, limit: 200, cursor: $cursor}
+    input: {filter:
+              {dappName: {_eq: farcaster}, identity: {_eq: "fc_fname:idriss"}},
+              blockchain: ALL, limit: 200,
+              cursor: $cursor
+            }
   ) {
     Follower {
       followerAddress {
