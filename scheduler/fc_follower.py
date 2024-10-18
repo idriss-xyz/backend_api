@@ -127,6 +127,7 @@ def update_follower():
     """
     cursor = ""
     all_followers = {}
+    follower_mapping = {}
 
     while True:
         data = get_follower(cursor)
@@ -142,7 +143,8 @@ def update_follower():
                 profile_name = social["profileName"]
                 profile_fid = social["userId"]
                 connected_addresses = social["connectedAddresses"]
-
+                if profile_name and profile_fid:
+                    follower_mapping[profile_name] = profile_fid
                 if profile_name and connected_addresses:
                     evm_addresses = [
                         addr
@@ -174,11 +176,11 @@ def update_follower():
                 follower_info["twitter"] = verifications[fid]
     except:
         print("verifications not updated")
-    store_follower(all_followers)
+    store_follower(all_followers, follower_mapping)
     return all_followers
 
 
-def store_follower(follower_json):
+def store_follower(all_follower_json, follower_mapping_json):
     """
     Stores the full JSON data of all followers, overwriting the existing entry.
 
@@ -194,9 +196,16 @@ def store_follower(follower_json):
         VALUES (1, %s)
         ON CONFLICT (id) DO UPDATE SET follower_data = EXCLUDED.follower_data
     """,
-        [json.dumps(follower_json)],
+        [json.dumps(all_follower_json)],
     )
-
+    cur.execute(
+        """
+        INSERT INTO followers (id, follower_data)
+        VALUES (2, %s)
+        ON CONFLICT (id) DO UPDATE SET follower_data = EXCLUDED.follower_data
+    """,
+        [json.dumps(follower_mapping_json)],
+    )
     conn.commit()
     cur.close()
     conn.close()

@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 from flask import Blueprint, jsonify, request
 
-from database.utils import get_follower
+from database.utils import get_all_follower, get_follower_with_connected_address
 from utils.graph_ql.fc_connected_addresses import get_farcaster_verified_addresses
 
 farcaster_bp = Blueprint("fc", __name__)
@@ -51,7 +51,7 @@ def get_fc_link():
     if not account:
         return jsonify({"error": "Missing name parameter"}), 400
 
-    follower_data = get_follower(account)
+    follower_data = get_follower_with_connected_address(account)
 
     try:
         return jsonify(follower_data), 200
@@ -66,7 +66,22 @@ def get_all_fc_links():
     Endpoint to fetch followers information.
     """
 
-    follower_data = get_follower()
+    follower_data = get_follower_with_connected_address()
+
+    try:
+        return jsonify(follower_data), 200
+
+    except requests.RequestException as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@farcaster_bp.route("/get-all-followers", methods=["GET"])
+def get_all_fc_followers():
+    """
+    Endpoint to fetch followers name and fid.
+    """
+
+    follower_data = get_all_follower()
 
     try:
         return jsonify(follower_data), 200
