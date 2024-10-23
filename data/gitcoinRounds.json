@@ -1,10 +1,14 @@
 {
   "arbitrum": {
     "chainId": 42161,
-    "roundIds": ["383"]
+    "roundIds": [
+      "608",
+      "609",
+      "610"
+    ]
   },
   "optimism": {
     "chainId": 10,
-    "roundIds": ["19"]
+    "roundIds": []
   }
 }
