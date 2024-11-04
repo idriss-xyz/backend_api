@@ -46,23 +46,6 @@ FOLLOWER_QUERY = """query MyQuery($cursor: String!) {
 }"""
 
 
-def create_table(conn):
-    cur = conn.cursor()
-
-    cur.execute(
-        """
-        CREATE TABLE IF NOT EXISTS followers (
-            id SERIAL PRIMARY KEY,
-            follower_data jsonb
-        )
-    """
-    )
-
-    conn.commit()
-    cur.close()
-    conn.close()
-
-
 def get_db_connection():
     return psycopg2.connect(
         dbname=database, user=username, password=password, host=hostname, port=port

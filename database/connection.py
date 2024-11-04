@@ -25,6 +25,15 @@ def create_table(connection):
     """
     )
 
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS pm_subscribers (
+            id SERIAL PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """
+    )
     connection.commit()
     cur.close()
     connection.close()
