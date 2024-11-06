@@ -1,10 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-from blueprints.extension import extension_bp
-from blueprints.farcaster import farcaster_bp
-from blueprints.landing import landing_bp
-from blueprints.snap import snap_bp
+from blueprints import extension_bp, farcaster_bp, landing_bp, snap_bp
 from utils.limiter import limiter
 
 app = Flask(__name__)
