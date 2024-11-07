@@ -1,5 +1,5 @@
 {
-    "gitcoin": true,
+    "gitcoin": false,
     "polymarket": true,
     "snapshot": true,
     "idriss-send": true,
