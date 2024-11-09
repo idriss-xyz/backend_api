@@ -34,6 +34,19 @@ def create_table(connection):
         );
     """
     )
+
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS twitter_cache (
+            user_name VARCHAR(20) NOT NULL,
+            user_id VARCHAR(25) NOT NULL,
+            topicality TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (user_name),
+            UNIQUE (user_id)
+        );
+    """
+    )
+
     connection.commit()
     cur.close()
     connection.close()

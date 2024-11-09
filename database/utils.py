@@ -1,5 +1,5 @@
 from database.connection import get_db_connection
-from utils.responses import HTTP_BAD_REQUEST, HTTP_OK
+from server_responses import HTTP_BAD_REQUEST, HTTP_OK
 
 
 def get_follower_with_connected_address(name=None):

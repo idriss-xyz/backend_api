@@ -2,12 +2,12 @@ import base64
 
 import requests
 
+from server_responses import HTTP_NOT_FOUND, HTTP_OK, create_response
 from utils.constants import (
     DEFAULT_NETWORK,
     PRIORITY_GITCOIN_ROUNDS_MAPPING,
     TOKEN_ROUTE,
 )
-from utils.responses import HTTP_NOT_FOUND, HTTP_OK, create_response
 
 
 def get_token_router(network, buy_token, sell_token):

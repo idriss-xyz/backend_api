@@ -22,18 +22,19 @@ import requests
 from flask import Blueprint, request
 from jsonschema import ValidationError, validate
 
-from utils.constants import FALLBACK_IMG_URL, TALLY_QUERY
-from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
-from utils.graph_ql.gc_applications import fetch_applications
-from utils.helper import fetch_data
-from utils.limiter import limiter
-from utils.responses import (
+from limiter import limiter
+from server_responses import (
     HTTP_BAD_GATEWAY,
     HTTP_BAD_REQUEST,
     HTTP_OK,
     create_response,
     handle_options_request,
 )
+from twitter import fetch_twitter_ids, fetch_twitter_usernames
+from utils.constants import FALLBACK_IMG_URL, TALLY_QUERY
+from utils.file_handler import fetch_custom_badges, fetch_handles, get_status
+from utils.graph_ql.gc_applications import fetch_applications
+from utils.helper import fetch_data
 from utils.token_prices import (
     get_0x_token_pricing,
     get_alternative_token_price,
@@ -349,3 +350,39 @@ def fetch_page():
             e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
         )
         return create_response({"error": "Unable to process the image"}, status_code)
+
+
+@extension_bp.route("/v2/getTwitterIDPlugin", methods=["GET"])
+def get_twitter_id_extension_v2():
+    args_extension = request.args
+    result_ids_cache_extension = {}
+    try:
+        all_names = args_extension["usernames"].replace("@", "").lower().split(",")
+        result_ids_extension = fetch_twitter_ids(all_names)
+        for name in all_names:
+            if not result_ids_extension.get(name, None):
+                result_ids_extension[name] = None
+    except Exception:
+        result_ids_extension = result_ids_cache_extension
+
+    response = create_response(result_ids_extension, HTTP_OK)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
+@extension_bp.route("/v2/getTwitterNamesPlugin", methods=["GET"])
+def get_twitter_names_plugin_v2():
+    args_extension = request.args
+    result_ids_cache_extension = {}
+    try:
+        all_ids = args_extension["ids"].split(",")
+        result_names_extension = fetch_twitter_usernames(all_ids)
+        for user_id in all_ids:
+            if not result_names_extension.get(user_id, None):
+                result_names_extension[user_id] = None
+    except Exception:
+        result_names_extension = result_ids_cache_extension
+
+    response = create_response(result_names_extension, HTTP_OK)
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    return response

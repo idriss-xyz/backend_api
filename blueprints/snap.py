@@ -1,9 +1,9 @@
 import requests
 from flask import Blueprint, jsonify, request
 
-from utils.farcaster import get_farcaster_verified_addresses
-from utils.limiter import limiter
-from utils.twitter import get_twitter_id
+from limiter import limiter
+from twitter import fetch_twitter_ids
+from utils.farcaster import get_farcaster_verified_addresses_from_api
 from utils.unstoppable_domains import get_unstoppable_domain_owner
 
 snap_bp = Blueprint("resolver_snap", __name__)
@@ -18,7 +18,7 @@ def get_twitter():
         return jsonify({"error": "Missing identifier parameter"}), 400
 
     try:
-        response = get_twitter_id(identifier)
+        response = fetch_twitter_ids(identifier)
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
     formatted_response = {"id": response["twitterIDs"].get(identifier, "Not found")}
@@ -33,7 +33,7 @@ def get_fc_connected_address_for_snap():
         return jsonify({"error": "Missing fid parameter"}), 400
 
     try:
-        response = get_farcaster_verified_addresses(fid)
+        response = get_farcaster_verified_addresses_from_api(fid)
     except requests.RequestException as e:
         return jsonify({"error": str(e)}), 400
 

@@ -2,8 +2,8 @@ from email_validator import EmailNotValidError, validate_email
 from flask import Blueprint, request
 
 from database.utils import set_subscription
-from utils.limiter import limiter
-from utils.responses import HTTP_BAD_REQUEST, create_response
+from limiter import limiter
+from server_responses import HTTP_BAD_REQUEST, create_response
 
 landing_bp = Blueprint("landing", __name__)
 
