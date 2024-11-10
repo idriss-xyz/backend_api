@@ -29,14 +29,12 @@ def get_batch_twitter_ids(user_names):
                     twitter_cache.set(key.lower(), value)
                 db_ids = temp_twitter_ids_db
         return {"data_db": db_ids, "data_cache": cache_ids}
-    except Exception as e:
-        print("Exception", e)
+    except Exception:
         return {"data_db": {}, "data_cache": {}}
 
 
 def get_batch_twitter_usernames(user_ids):
     try:
-        print("getting names", user_ids)
         cache_names = {}
         db_names = {}
 
@@ -50,7 +48,6 @@ def get_batch_twitter_usernames(user_ids):
         for id_ in user_ids:
             if id_ not in list(cache_names):
                 remaining_ids += "," + id_
-        print("remaining ids", remaining_ids)
         if remaining_ids:
             temp_twitter_names_db = get_twitter_names_from_db(
                 remaining_ids[1:].split(",")
@@ -66,7 +63,6 @@ def get_batch_twitter_usernames(user_ids):
 
 def fetch_twitter_ids(usernames):
     result_ids_full_plugin = get_batch_twitter_ids(usernames)
-    print(result_ids_full_plugin)
     result_ids_plugin = {
         **result_ids_full_plugin["data_db"],
         **result_ids_full_plugin["data_cache"],

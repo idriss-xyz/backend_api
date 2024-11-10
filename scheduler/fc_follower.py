@@ -157,7 +157,7 @@ def update_follower():
 
             if fid in verifications:
                 follower_info["twitter"] = verifications[fid]
-    except:
+    except Exception:
         print("verifications not updated")
     store_follower(all_followers, follower_mapping)
     return all_followers
@@ -226,7 +226,7 @@ def set_interval(func, sec):
     for _ in range(4):
         try:
             func()
-        except:
+        except Exception:
             continue
         time.sleep(sec)
 

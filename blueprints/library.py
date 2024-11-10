@@ -27,8 +27,9 @@ def get_twitter_names():
 def get_twitter_id_library():
     args_library = request.args
     try:
-        name = [args_library["identifier"].replace("@", "").lower()]
-        result_ids_library = fetch_twitter_ids(name)
+        name = args_library["identifier"].replace("@", "").lower()
+        result_ids_library = fetch_twitter_ids([name])
+
         twitter_id_library = result_ids_library[name]
     except Exception:
         twitter_id_library = "Not found"

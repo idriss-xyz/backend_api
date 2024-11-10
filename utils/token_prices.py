@@ -55,8 +55,6 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         response = requests.get(url, timeout=5)
         data = response.json()
         latest_data = data["Price"]
-        print(latest_data)
-        print(sell_amount)
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / float(latest_data)
         total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
         return {"price": token_per_dollar, "total_amount": total_amount}
