@@ -1,7 +1,14 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-from blueprints import creators_bp, extension_bp, farcaster_bp, landing_bp, snap_bp
+from blueprints import (
+    creators_bp,
+    extension_bp,
+    farcaster_bp,
+    landing_bp,
+    library_bp,
+    snap_bp,
+)
 from cache import twitter_cache, twitter_name_cache
 from limiter import limiter
 
@@ -17,6 +24,7 @@ app.register_blueprint(snap_bp)
 app.register_blueprint(farcaster_bp)
 app.register_blueprint(extension_bp)
 app.register_blueprint(landing_bp)
+app.register_blueprint(library_bp)
 
 
 @app.route("/")

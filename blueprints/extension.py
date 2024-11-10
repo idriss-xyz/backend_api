@@ -373,7 +373,7 @@ def get_twitter_id_extension_v2():
 @extension_bp.route("/v2/getTwitterNamesPlugin", methods=["GET"])
 def get_twitter_names_plugin_v2():
     args_extension = request.args
-    result_ids_cache_extension = {}
+    result_names_cache_extension = {}
     try:
         all_ids = args_extension["ids"].split(",")
         result_names_extension = fetch_twitter_usernames(all_ids)
@@ -381,7 +381,7 @@ def get_twitter_names_plugin_v2():
             if not result_names_extension.get(user_id, None):
                 result_names_extension[user_id] = None
     except Exception:
-        result_names_extension = result_ids_cache_extension
+        result_names_extension = result_names_cache_extension
 
     response = create_response(result_names_extension, HTTP_OK)
     response.headers["Access-Control-Allow-Origin"] = "*"
