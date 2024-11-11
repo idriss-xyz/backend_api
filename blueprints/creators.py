@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, render_template, request
 
 from server_responses import HTTP_OK, create_response
 from web3_utils import ns
@@ -18,3 +18,8 @@ def find_address():
         reverse_resolved = None
     response = create_response({"name": reverse_resolved}, HTTP_OK)
     return response
+
+
+@creators_bp.route("/creators/obs", methods=["GET"])
+def serve_obs():
+    return render_template("obs.html")
