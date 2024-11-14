@@ -713,6 +713,7 @@ const DECIMALS_BY_NETWORK_AND_TOKEN = {
         "0xfa980ced6895ac314e7de34ef1bfae90a5add21b": 18, // PRIME
         "0x4ed4e862860bed51a9570b96d89af5e1b0efefed": 18, // DEGEN
         "0xeff2a458e464b07088bdb441c21a42ab4b61e07e": 18, // PDT
+        "0x25f8087ead173b73d6e8b84329989a8eea16cf73": 18, // PDT
         "0x50c5725949a6f0c72e6c4a641f24049a917db0cb": 18, // DAI
         "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913": 6, // USDC
     },
