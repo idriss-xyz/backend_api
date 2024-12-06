@@ -1,4 +1,5 @@
 let streamerAddress;
+let newStreamerAddress;
 let name;
 let currBlockBase;
 let currBlockEthereum;
@@ -35,6 +36,8 @@ async function resolveENS(identifier, web3) {
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     streamerAddress = urlParams.get("streamerAddress");
+    newStreamerAddress = urlParams.get("address");
+    if (newStreamerAddress) streamerAddress = newStreamerAddress;
 });
 
 let abiTippingOG = [
