@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, make_response, render_template, request
 
 from server_responses import HTTP_OK, create_response
 from web3_utils import ns
@@ -22,4 +22,8 @@ def find_address():
 
 @creators_bp.route("/creators/obs", methods=["GET"])
 def serve_obs():
-    return render_template("obs.html")
+    response = make_response(render_template("obs.html"))
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response

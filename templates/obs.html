@@ -20,11 +20,17 @@
                 id="donationAlert"
                 class="absolute top-0 left-0 p-4 text-gray-900 bg-white bg-opacity-80 rounded-r-md flex items-center"
             >
+                <audio id="notification-sound" hidden>
+                    <source
+                        src="../static/audio/notification.mp3"
+                        type="audio/mpeg"
+                    />
+                </audio>
                 <div
                     class="flex items-center justify-center h-14 w-14 text-gray-900"
                 >
                     <img
-                        class="w-auto h-16"
+                        class="w-auto h-14"
                         src="../static/images/logo_circular.png"
                         alt="IDriss"
                     />

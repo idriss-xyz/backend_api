@@ -1117,9 +1117,16 @@ interval = setInterval(async function () {
 displayAlerts = setInterval(async function () {
     if (resTip.length > 0) {
         if (document.getElementById("fader").style.opacity == 0) {
+            const audio = document.getElementById("notification-sound");
             document.getElementById("baseInfo").innerHTML = resTip[0][0];
             document.getElementById("message").innerHTML = resTip[0][1];
             document.getElementById("fader").style.opacity = 1;
+
+            audio.currentTime = 0;
+            audio.play().catch((error) => {
+                console.warn("Audio playback failed:", error);
+            });
+
             resTip.shift();
             console.log("timeout start");
             await setTimeout(function () {
@@ -1129,6 +1136,29 @@ displayAlerts = setInterval(async function () {
         }
     }
 }, 2000);
+
+document.addEventListener("keydown", function (event) {
+    console.log(event.ctrlKey, event.shiftKey, event.key);
+    if (event.ctrlKey && event.shiftKey && event.key === "!") {
+        triggerTestAlert();
+    }
+});
+
+function triggerTestAlert() {
+    const audio = document.getElementById("notification-sound");
+    document.getElementById("baseInfo").innerHTML = "Test Donation!";
+    document.getElementById("message").innerHTML = "Great Stream!!";
+    document.getElementById("fader").style.opacity = 1;
+
+    audio.currentTime = 0;
+    audio.play().catch((error) => {
+        console.warn("Audio playback failed:", error);
+    });
+
+    setTimeout(function () {
+        document.getElementById("fader").style.opacity = 0;
+    }, 10000);
+}
 
 async function init() {
     await loadTippingContracts();
