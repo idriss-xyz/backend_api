@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
     streamerAddress = urlParams.get("streamerAddress");
     newStreamerAddress = urlParams.get("address");
     if (newStreamerAddress) streamerAddress = newStreamerAddress;
+    setupWebSocket();
 });
 
 let abiTippingOG = [
@@ -1083,38 +1084,77 @@ async function calculateDollar(_assetAddr, _amount, _network) {
     return val;
 }
 
-interval = setInterval(async function () {
-    ret = await fetchDonations();
-    retString = "";
-    for (let i = 0; i < ret.length; i++) {
-        fromAccount = ret[i].fromAddress;
-        if (typeof ret[i].tokenId == "undefined") {
-            let reverse = (await resolveENS(fromAccount, web3Ethereum)).ens;
-            fromAccountIdentifier = reverse
-                ? reverse
-                : fromAccount
-                      .substring(0, 4)
-                      .concat("...")
-                      .concat(fromAccount.substr(-2));
-            basicInfo =
-                fromAccountIdentifier +
-                " sent " +
-                "$" +
-                (await calculateDollar(
-                    ret[i].tokenAddress,
-                    ret[i].amount,
-                    ret[i].network.toLowerCase()
-                ));
-        } else {
-            continue;
-        }
+let useWebSocket = false;
+let ws;
+let interval;
 
-        message = ret[i].message;
-        resTip.push([basicInfo, message]);
+function retryWebSocketConnection() {
+    if (useWebSocket) return; // Skip if WebSocket is already connected
+
+    console.log("Retrying WebSocket connection...");
+    ws = new WebSocket("ws://localhost:8080");
+
+    ws.onopen = () => {
+        console.log("Connected to WebSocket server!");
+        useWebSocket = true;
+        stopQueryingChain();
+        init();
+    };
+
+    ws.onmessage = (event) => {
+        try {
+            const {action, data} = JSON.parse(event.data);
+
+            if (action === "show") {
+                document.getElementById("baseInfo").innerHTML =
+                    data.baseInfo || "Unknown Address";
+                document.getElementById("message").innerHTML =
+                    data.message || "Thank you!";
+
+                document.getElementById("fader").style.opacity = 1;
+
+                setTimeout(() => {
+                    document.getElementById("fader").style.opacity = 0;
+                }, 10000);
+            }
+        } catch (err) {
+            console.error("Invalid WebSocket message:", err);
+        }
+    };
+
+    ws.onerror = (error) => {
+        console.error("WebSocket error:", error);
+        useWebSocket = false;
+        init();
+    };
+
+    ws.onclose = () => {
+        console.log("WebSocket connection closed.");
+        if (useWebSocket) {
+            useWebSocket = false;
+            init();
+        }
+    };
+}
+
+// Start the WebSocket and retry logic
+function setupWebSocket() {
+    retryWebSocketConnection(); // Attempt initial connection
+    setInterval(retryWebSocketConnection, 6000); // Retry every minute
+}
+
+// Blockchain querying fallback
+function stopQueryingChain() {
+    if (interval) {
+        clearInterval(interval);
+        interval = null;
+        console.log("Stopped blockchain querying.");
     }
-}, 5000);
+}
 
 displayAlerts = setInterval(async function () {
+    if (useWebSocket) return; // Skip polling if WebSocket is active
+
     if (resTip.length > 0) {
         if (document.getElementById("fader").style.opacity == 0) {
             const audio = document.getElementById("notification-sound");
@@ -1138,32 +1178,82 @@ displayAlerts = setInterval(async function () {
 }, 2000);
 
 document.addEventListener("keydown", function (event) {
-    console.log(event.ctrlKey, event.shiftKey, event.key);
     if (event.ctrlKey && event.shiftKey && event.key === "!") {
         triggerTestAlert();
     }
 });
 
 function triggerTestAlert() {
-    const audio = document.getElementById("notification-sound");
-    document.getElementById("baseInfo").innerHTML = "Test Donation!";
-    document.getElementById("message").innerHTML = "Great Stream!!";
-    document.getElementById("fader").style.opacity = 1;
+    if (useWebSocket && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({action: "test"}));
+    } else {
+        // Fallback to local test
+        const audio = document.getElementById("notification-sound");
+        document.getElementById("baseInfo").innerHTML = "Test Donation!";
+        document.getElementById("message").innerHTML = "Great Stream!!";
+        document.getElementById("fader").style.opacity = 1;
 
-    audio.currentTime = 0;
-    audio.play().catch((error) => {
-        console.warn("Audio playback failed:", error);
-    });
+        audio.currentTime = 0;
+        audio.play().catch((error) => {
+            console.warn("Audio playback failed:", error);
+        });
 
-    setTimeout(function () {
-        document.getElementById("fader").style.opacity = 0;
-    }, 10000);
+        setTimeout(function () {
+            document.getElementById("fader").style.opacity = 0;
+        }, 10000);
+    }
 }
 
 async function init() {
+    if (useWebSocket) {
+        console.log(
+            "Using WebSocket connection; skipping blockchain querying."
+        );
+        return;
+    }
+
+    console.log("No WebSocket connection; initializing blockchain querying.");
     await loadTippingContracts();
     await setCurrBlock();
     txnHashes = new Array();
+    startQueryingChain();
 }
 
-init();
+// Start the interval for querying the blockchain
+function startQueryingChain() {
+    if (interval) {
+        console.log("Blockchain querying is already active.");
+        return; // Prevent multiple intervals from being set
+    }
+
+    interval = setInterval(async function () {
+        ret = await fetchDonations();
+        retString = "";
+        for (let i = 0; i < ret.length; i++) {
+            fromAccount = ret[i].fromAddress;
+            if (typeof ret[i].tokenId == "undefined") {
+                let reverse = (await resolveENS(fromAccount, web3Ethereum)).ens;
+                fromAccountIdentifier = reverse
+                    ? reverse
+                    : fromAccount
+                          .substring(0, 4)
+                          .concat("...")
+                          .concat(fromAccount.substr(-2));
+                basicInfo =
+                    fromAccountIdentifier +
+                    " sent " +
+                    "$" +
+                    (await calculateDollar(
+                        ret[i].tokenAddress,
+                        ret[i].amount,
+                        ret[i].network.toLowerCase()
+                    ));
+            } else {
+                continue;
+            }
+
+            message = ret[i].message;
+            resTip.push([basicInfo, message]);
+        }
+    }, 5000);
+}
