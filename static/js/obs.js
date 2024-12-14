@@ -17,6 +17,7 @@ let txnHashes = new Array();
 let resTip = new Array();
 
 async function resolveENS(identifier, web3) {
+    console.log("resolving ens", identifier);
     try {
         if (web3.utils.isAddress(identifier)) {
             const response = await fetch(
@@ -26,6 +27,7 @@ async function resolveENS(identifier, web3) {
             return {address: identifier, ens: ensData.name};
         } else {
             const resolvedAddress = await web3.eth.ens.getAddress(identifier);
+            console.log(resolvedAddress);
             return {address: resolvedAddress, ens: identifier};
         }
     } catch (error) {
@@ -33,11 +35,15 @@ async function resolveENS(identifier, web3) {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     streamerAddress = urlParams.get("streamerAddress");
     newStreamerAddress = urlParams.get("address");
     if (newStreamerAddress) streamerAddress = newStreamerAddress;
+    if (!web3Ethereum.utils.isAddress(streamerAddress))
+        streamerAddress = (await resolveENS(streamerAddress, web3Ethereum))
+            .address;
+
     setupWebSocket();
 });
 
@@ -1140,7 +1146,11 @@ function retryWebSocketConnection() {
 // Start the WebSocket and retry logic
 function setupWebSocket() {
     retryWebSocketConnection(); // Attempt initial connection
-    setInterval(retryWebSocketConnection, 6000); // Retry every minute
+    try {
+        setInterval(retryWebSocketConnection, 60000); // Retry every minute
+    } catch {
+        console.log("Websocket not online");
+    }
 }
 
 // Blockchain querying fallback
