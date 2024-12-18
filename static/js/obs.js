@@ -1169,7 +1169,7 @@ displayAlerts = setInterval(async function () {
         if (document.getElementById("fader").style.opacity == 0) {
             const audio = document.getElementById("notification-sound");
             document.getElementById("baseInfo").innerHTML = resTip[0][0];
-            document.getElementById("message").innerHTML = resTip[0][1];
+            document.getElementById("message").innerHTML = resTip[0][1].trim();
             document.getElementById("fader").style.opacity = 1;
 
             audio.currentTime = 0;
