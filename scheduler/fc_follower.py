@@ -121,7 +121,7 @@ def update_follower():
         for follower in followers:
             social = follower['user']
             profile_name = social["username"]
-            profile_fid = social["fid"]
+            profile_fid = str(social["fid"])
             connected_addresses = social["verifications"]
             if profile_name and profile_fid:
                 follower_mapping[profile_name] = profile_fid
@@ -200,6 +200,7 @@ def update_twitter_verifications():
     while True:
         data = get_fc_twitter_account_verifications(cursor)
         verifications = data["result"]["verifications"]
+        print("verifications done", len(verifications))
 
         for verified_account in verifications:
             fid = str(verified_account["fid"])
