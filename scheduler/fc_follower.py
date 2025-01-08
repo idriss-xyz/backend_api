@@ -11,8 +11,7 @@ from urllib.parse import urlparse
 import psycopg2
 import requests
 
-AIRSTACK_API_URL = "https://api.airstack.xyz/graphql"
-AIRSTACK_API_KEY = os.getenv("API_KEY_AIRSTACK")
+NEYNAR_API_KEY = os.getenv("NEYNAR_API_KEY")
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 result = urlparse(DATABASE_URL)
@@ -62,24 +61,24 @@ def get_follower(cursor=""):
     Returns:
         dict: Account name to wallet address mapping.
     """
-    if not AIRSTACK_API_KEY:
-        raise ValueError("AIRSTACK_API_KEY not set")
+    
+    url = "https://api.neynar.com/v2/farcaster/followers?fid=189333&limit=100"
 
-    headers = {"Authorization": AIRSTACK_API_KEY, "Content-Type": "application/json"}
+    base_url = "https://api.neynar.com/v2/farcaster/followers?fid=189333&limit=100"
+    url = f"{base_url}&cursor={cursor}" if cursor else base_url
+    
+    if not NEYNAR_API_KEY:
+        raise ValueError("NEYNAR_API_KEY not set")
+        
 
-    response = requests.post(
-        AIRSTACK_API_URL,
-        json={
-            "query": FOLLOWER_QUERY,
-            "operation_name": "MyQuery",
-            "variables": {"cursor": cursor},
-        },
-        headers=headers,
-        timeout=10,
-    )
+    headers = {"accept": "application/json",
+    "x-neynar-experimental": "false",
+    "x-api-key": NEYNAR_API_KEY}
+
+    response = requests.get(url, headers=headers, timeout=10)
 
     response.raise_for_status()
-    data = response.json()["data"]
+    data = response.json()
     return data
 
 
@@ -114,41 +113,34 @@ def update_follower():
 
     while True:
         data = get_follower(cursor)
-
-        followers = data["SocialFollowers"]["Follower"]
-        page_info = data["SocialFollowers"]["pageInfo"]
-        cursor = page_info["nextCursor"]
-        has_next_page = page_info["hasNextPage"]
+        
+        followers = data["users"]
+        page_info = data["next"]
+        cursor = page_info["cursor"]
 
         for follower in followers:
-            socials = follower["followerAddress"]["socials"]
-            for social in socials:
-                profile_name = social["profileName"]
-                profile_fid = social["userId"]
-                connected_addresses = social["connectedAddresses"]
-                if profile_name and profile_fid:
-                    follower_mapping[profile_name] = profile_fid
-                if profile_name and connected_addresses:
-                    evm_addresses = [
-                        addr
-                        for addr in connected_addresses
-                        if addr["address"].startswith("0x")
-                    ]
+            social = follower['user']
+            profile_name = social["username"]
+            profile_fid = social["fid"]
+            connected_addresses = social["verifications"]
+            if profile_name and profile_fid:
+                follower_mapping[profile_name] = profile_fid
+            if profile_name and connected_addresses:
+                evm_addresses = [
+                    addr
+                    for addr in connected_addresses
+                    if addr.startswith("0x")
+                ]
 
-                    if evm_addresses:
-                        latest_evm_address = max(
-                            evm_addresses,
-                            key=lambda addr: datetime.fromisoformat(
-                                addr["timestamp"].replace("Z", "+00:00")
-                            ),
-                        )
-                        all_followers[profile_name] = {
-                            "address": latest_evm_address["address"],
-                            "fid": profile_fid,
-                            "twitter": "",
-                        }
+                if evm_addresses:
+                    latest_evm = evm_addresses[-1]
+                    all_followers[profile_name] = {
+                        "address": latest_evm,
+                        "fid": profile_fid,
+                        "twitter": "",
+                    }
 
-        if not has_next_page:
+        if not cursor:
             break
     try:
         verifications = update_twitter_verifications()
