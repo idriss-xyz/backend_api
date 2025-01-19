@@ -1,6 +1,8 @@
 import json
 import os
 
+from utils.constants import INELIGIBLE
+
 
 def fetch_custom_badges():
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,3 +37,12 @@ def get_status():
     with open(file_path, "r", encoding="utf-8") as service_status:
         status = json.load(service_status)
     return status
+
+
+def get_eligibility(address):
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(root_dir, "data", "eligibility.json")
+    with open(file_path, "r", encoding="utf-8") as eligibility:
+        status = json.load(eligibility)
+    eligibility_status_for_address = status.get(address, INELIGIBLE)
+    return eligibility_status_for_address

@@ -53,7 +53,7 @@ def get_db_connection():
 
 def get_follower(cursor=""):
     """
-    Fetches followers of @idriss farcaster account from Airstack.
+    Fetches followers of @idriss farcaster account from Neynar.
 
     Args:
         cursor (str): Next page cursor.
@@ -61,19 +61,18 @@ def get_follower(cursor=""):
     Returns:
         dict: Account name to wallet address mapping.
     """
-    
-    url = "https://api.neynar.com/v2/farcaster/followers?fid=189333&limit=100"
 
     base_url = "https://api.neynar.com/v2/farcaster/followers?fid=189333&limit=100"
     url = f"{base_url}&cursor={cursor}" if cursor else base_url
-    
+
     if not NEYNAR_API_KEY:
         raise ValueError("NEYNAR_API_KEY not set")
-        
 
-    headers = {"accept": "application/json",
-    "x-neynar-experimental": "false",
-    "x-api-key": NEYNAR_API_KEY}
+    headers = {
+        "accept": "application/json",
+        "x-neynar-experimental": "false",
+        "x-api-key": NEYNAR_API_KEY,
+    }
 
     response = requests.get(url, headers=headers, timeout=10)
 
@@ -113,23 +112,23 @@ def update_follower():
 
     while True:
         data = get_follower(cursor)
-        
+
         followers = data["users"]
         page_info = data["next"]
         cursor = page_info["cursor"]
 
         for follower in followers:
-            social = follower['user']
+            social = follower["user"]
             profile_name = social["username"]
             profile_fid = str(social["fid"])
+            if profile_fid == "901854":
+                print(follower)
             connected_addresses = social["verifications"]
             if profile_name and profile_fid:
                 follower_mapping[profile_name] = profile_fid
             if profile_name and connected_addresses:
                 evm_addresses = [
-                    addr
-                    for addr in connected_addresses
-                    if addr.startswith("0x")
+                    addr for addr in connected_addresses if addr.startswith("0x")
                 ]
 
                 if evm_addresses:

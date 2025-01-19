@@ -37,6 +37,18 @@ def create_table(connection):
 
     cur.execute(
         """
+        CREATE TABLE IF NOT EXISTS claims (
+            id SERIAL PRIMARY KEY,
+            address VARCHAR(42) UNIQUE NOT NULL,
+            subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            claim_option VARCHAR(10) NOT NULL,
+            signature VARCHAR(200) NOT NULL
+        );
+    """
+    )
+
+    cur.execute(
+        """
         CREATE TABLE IF NOT EXISTS twitter_cache (
             user_name VARCHAR(20) NOT NULL,
             user_id VARCHAR(25) NOT NULL,

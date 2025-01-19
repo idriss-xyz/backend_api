@@ -40,4 +40,5 @@ def get_farcaster_verified_addresses(fc_name):
 
     response.raise_for_status()
     data = response.json()["data"]
+    print(data)
     return data

@@ -67,3 +67,27 @@ def set_subscription(email):
     except Exception as e:
         print(e)
         return HTTP_BAD_REQUEST
+
+
+def set_claimed(address, claim_option, signature):
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                insert_query = """
+                    INSERT INTO claims (address, claim_option, signature)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT (address) DO NOTHING
+                    RETURNING id;
+                """
+                cur.execute(
+                    insert_query,
+                    (
+                        address,
+                        claim_option,
+                        signature,
+                    ),
+                )
+        return HTTP_OK
+    except Exception as e:
+        print(e)
+        return HTTP_BAD_REQUEST

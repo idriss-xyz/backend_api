@@ -6,6 +6,29 @@ USDC_ADDRESS_ON_ALEPH = "0x4ca4b85ead5ea49892d3a81dbfae2f5c2f75d53d"
 DAI_ADDRESS_ON_ETH = "0x6b175474e89094c44da98b954eedeac495271d0f"
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
 
+INELIGIBLE = {
+    "paid": 0,
+    "free": 0,
+    "extension": 0,
+    "registration": "2024-11-12T00:00:00",
+    "invites": 0.0,
+    "farcaster": 0,
+    "hacker": 0,
+    "ardent": 0,
+    "aavegotchi": 0,
+    "gitcoin": 1,
+    "across": 0,
+    "polymarket": 0,
+    "snapshot": 0,
+    "tally": 0,
+    "jumper": 0,
+    "time_multiplier": 1.0,
+    "invite_multiplier": 1.0,
+    "allocation_usage": 0,
+    "allocation_partner": 0,
+    "allocation": 0,
+}
+
 USDC_DECIMALS = 6
 
 PRIORITY_GITCOIN_ROUNDS = [("388", 42161), ("389", 42161)]
