@@ -29,9 +29,9 @@
             "claimIndices": [
                 0
             ],
-            "expiry": 1737806400,
+            "expiry": 1737908732,
             "memo": "IDRISS airdrop claim",
-            "signature": "0xa934f15056f7825ac35b5351fd222ca42a3aad93109a0a0d59c7696c1bf143fb775a1e230cb439d871d4ee79d32839590c3b7535626192ff1e14b699f19918391b"
+            "signature": "0xa3ed23bdd733f89f82bc67f9653432eb8cf13a104062d0ab556c729f40087161146b73206a174c716e34921305142d1f3352b87e3c976e47f79dd174ab1e08481b"
         }
     },
     "0x4a3755eb99ae8b22aafb8f16f0c51cf68eb60b85": {
@@ -64,9 +64,9 @@
             "claimIndices": [
                 1
             ],
-            "expiry": 1737806400,
+            "expiry": 1737908732,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x3e66ed3e24f0d9f67d6eeac6208ca27ae8f4291ff134b993d67b91e449ad93075e99b8c384bb79158405ddff4cfd942a265a2bbd8617218f30290267df7cf4951b"
+            "signature": "0x53bacf444b5309d5db3dceb44936285f13a751476c00cb473cd5ef1c3e16d7da731134eeada85544e4696d0df4c12a43b79e5ac8ee6343573fddb4c2498750221c"
         }
     },
     "0x32b2304953a56be7eb58a5b564be1b6a5358761a": {
@@ -99,9 +99,9 @@
             "claimIndices": [
                 2
             ],
-            "expiry": 1737806400,
+            "expiry": 1737908732,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x2ef70c5ebe43ae59da42e9847fb6b79eb964e130b82e255f16d2df534e58a9a86c3f71d31c324763c29459d5420875129da261aa83dfd9329c1d3a3741d8875e1b"
+            "signature": "0x511183f75bce72685ae63be579f7981b0812ca8129978aee906db913361e2086506aee8cb6d31745d160c069d9d34912156fd1a29e7e489624402ef90455076b1c"
         }
     }
 }
