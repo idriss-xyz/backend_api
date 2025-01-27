@@ -124,5 +124,47 @@
             "memo": "IDRISS airdrop claim",
             "signature": "0xad80be1b5e7d04a49e59f15514f2f039c50e675aa7dd76e49904128ea9e1188368f569d51a458ac6e1ab71016c0f2ede79e500d028b574cc2fdf9694b6b336171b"
         }
+    },
+    "0xce3f186813a367fccc3b5e5a720020d98ba278b5": {
+        "paid": 0,
+        "free": 1,
+        "extension": 1,
+        "registration": "2022-07-25T08:25:00",
+        "invites": 0,
+        "extension_days": 0,
+        "farcaster": 0,
+        "hacker": 0,
+        "ardent": 0,
+        "avatar": 1,
+        "aavegotchi": 0,
+        "gitcoin": 1,
+        "across": 0,
+        "polymarket": 0,
+        "snapshot": 0,
+        "tally": 0,
+        "agora": 0,
+        "jumper": 0,
+        "allocation_gitcoin": 0,
+        "allocation_ido_7d": 0,
+        "allocation_ido": 0,
+        "time_multiplier": 1.8553971486761711,
+        "invite_multiplier": 1,
+        "allocation_usage": 5302.697069701712,
+        "allocation_paid": 0,
+        "allocation_free": 2857.984919015961,
+        "allocation_extension": 400,
+        "allocation_partner": 0,
+        "allocation": 20832.304437707757,
+        "allocation_raw": 6303.097229765738,
+        "allocation_claim": 10416.152218853878,
+        "claimData": {
+            "amount": "10416152218853878000000",
+            "claimIndices": [
+                3
+            ],
+            "expiry": 1740657600,
+            "memo": "IDRISS airdrop claim",
+            "signature": "0xa8f3eec861b3ec8f87c8526a2341c8b4aa56ef3d3ce95e946a1ca7f3a28e153c1d90d6d343cc311c288946c3991ed2f078d62b9836aeaf87c4deaf503c2c030d1b"
+        }
     }
 }
