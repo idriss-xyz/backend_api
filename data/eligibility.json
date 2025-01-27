@@ -1,5 +1,5 @@
 {
-    "0x974fdbc4ff3ae73ceeba5b4c85521f2638ee54e5": {
+    "0x8d35905683b7fd8c0b5cbe757d5d2532874b78d0": {
         "paid": 0,
         "free": 1,
         "extension": 0,
@@ -36,9 +36,9 @@
             "claimIndices": [
                 0
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x2debf7d7f0e6fdbbd9f27d79097b479612e5e37938887b47443b8a4bd25b62b0083b50d1089224b20ef6f9c1299b96252e3d67dfd20f91afbf2e80bfc11d55b11b"
+            "signature": "0xdb5d9732f81162ebc0a2df06f6cfbfa502c468446a143e7f2c6f478ad6873f04657f0d524a8a2dbf41e611153b29aba50e833ae1a78e0fe76fc1262322dd8c8d1b"
         }
     },
     "0x6a8d5b2195229583a689356760c2241c6c5ff157": {
@@ -78,9 +78,9 @@
             "claimIndices": [
                 1
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0xc3260575508f1a026f5340fbd437ef9198ffc682889484244a4886788fba407a0b8d551e0872cb7403af9fa1c28eb9225a395c9c9ef2de5b2a0b35de472d0cea1b"
+            "signature": "0x67ff4e410d0805de2c3dc5821c14e3bb3f099362c799672e8d7b1c7189386c66773e5caa145512ec24abe1dc4d6c5a1c3f39aba919a5221ae0c3d1de4d4830c41c"
         }
     },
     "0xc8fff6bbfc93e912b0012716cf4573c2f7a9b974": {
@@ -120,9 +120,9 @@
             "claimIndices": [
                 2
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x80d49057428e3d1b58b851d0ab599b2e4dc3a2b733ae45e8ff6309fd644fa1f65670261bbb06b1dd7f44a98f5a749b7bcbbba250b81ecb77be75c6e5d292b4551c"
+            "signature": "0x2a21352c82e92e6922566691f27901eae543a9ad722e0292c7d20061487b635758c5056b3cb2b8419b67cfaf674833b3e3e3b48313a47cb7ea4558707debabbd1c"
         }
     },
     "0xcce9a28b570946123f392cf1dbfa6d2d5e636a1f": {
@@ -162,9 +162,9 @@
             "claimIndices": [
                 3
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0xfaac95dc16899b631558e592a08f7e84fe46fbec077c3cb6848f439d93c0647d68b7c2a7a0287282055dbe63fefe97957d271674864d7361285b35a7f9a097f51b"
+            "signature": "0xcdd8139ded46d5608594142a7f90ca6af201fc01c160e1002889b74c611d4ef64045e791134f9ff92dd386d40e1f6c9482905afef9bf5930caa5a5dddd82455d1c"
         }
     },
     "0x4a3755eb99ae8b22aafb8f16f0c51cf68eb60b85": {
@@ -204,12 +204,12 @@
             "claimIndices": [
                 4
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x7920c6eb457b87572e55280d169fe09438bbeb6f3be581e8cd96d3217117fdf73c05eedd61ac45a5d234c43cae8787fffa52f5435612a88d61533ca4a130d08d1c"
+            "signature": "0xf8e0414bbc6b4a13e6a393f6b3516b092d023b2f7fad6e642a620d00e9fc123d2b635f577efb85a13f55658b8125d9acfdba06b04d87e93de9cfb0d98719a6cd1b"
         }
     },
-    "0xce3f186813a367fccc3b5e5a720020d98ba278b5": {
+    "0x71b737892f288d10896ce1548f34efbc19fc95bd": {
         "paid": 0,
         "free": 1,
         "extension": 1,
@@ -246,9 +246,9 @@
             "claimIndices": [
                 5
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x25a49a628f6ea4c59cf2be45a9ec1e347fe64adb439b59d73b13735bf568cf3924d1c5ed14b14e3412e93cdad1ebd3df44c621dbea1b2faf458f82f9b5a7b17e1b"
+            "signature": "0xd108faaee261a034b4de17f2d256668279ffcd521475b273c2811428bba3796635b10e91dfacaff689428dd6b1166d4e379d98fcf537218c284f7dd9f815d9391c"
         }
     },
     "0x32b2304953a56be7eb58a5b564be1b6a5358761a": {
@@ -288,9 +288,51 @@
             "claimIndices": [
                 6
             ],
-            "expiry": 1740657600,
+            "expiry": 1739231999,
             "memo": "IDRISS airdrop claim",
-            "signature": "0x2ab0f1f922d5b8032c7018910c48049446d3c5b9c2b449d42b15a52728a7754e0d88323bf45f9eab7783a1ce76a1e3d6a262fc9c603bfb467fec13d70f09ed901b"
+            "signature": "0x5ce1c02693432dba8178febe80a15131c72a56c9e488e9597e6b20dec1a3eac16185656177ce4ca7e6b9fa2d8ee2871cee7374ff9f7f007930a84845ab90c7f61c"
+        }
+    },
+    "0xce3f186813a367fccc3b5e5a720020d98ba278b5": {
+        "paid": 0,
+        "free": 1,
+        "extension": 1,
+        "registration": "2022-07-25T08:25:00",
+        "invites": 0,
+        "extension_days": 0,
+        "farcaster": 0,
+        "hacker": 0,
+        "ardent": 0,
+        "avatar": 1,
+        "aavegotchi": 0,
+        "gitcoin": 1,
+        "across": 0,
+        "polymarket": 0,
+        "snapshot": 0,
+        "tally": 0,
+        "agora": 0,
+        "jumper": 0,
+        "allocation_gitcoin": 0,
+        "allocation_ido_7d": 0,
+        "allocation_ido": 0,
+        "time_multiplier": 1.8553971486761711,
+        "invite_multiplier": 1,
+        "allocation_usage": 5302.697069701712,
+        "allocation_paid": 0,
+        "allocation_free": 2857.984919015961,
+        "allocation_extension": 400,
+        "allocation_partner": 0,
+        "allocation": 20832.304437707757,
+        "allocation_raw": 6303.097229765738,
+        "allocation_claim": 10416.152218853878,
+        "claimData": {
+            "amount": "10416152218853878000000",
+            "claimIndices": [
+                7
+            ],
+            "expiry": 1739231999,
+            "memo": "IDRISS airdrop claim",
+            "signature": "0x9d944701f07b538244b5078e4b97478ba8303fad99ffc66e750d024cee88d7335ef361a32a3a84784b3de090ee29637fb9e4e237d5ccf1fa59a44300042a13b11c"
         }
     }
 }
