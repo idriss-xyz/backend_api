@@ -4,8 +4,10 @@ import requests
 
 from server_responses import HTTP_BAD_REQUEST, create_response
 from utils.constants import (
+    ABSTRACT_PENGU_ADDRESS,
     NATIVE_ADDRESS,
     PRICING_API_URL,
+    USDC_ADDRESS_ON_ABSTRACT,
     USDC_ADDRESS_ON_ALEPH,
     USDC_DECIMALS,
     UNSUPPORTED_0x_NETWORKS,
@@ -24,7 +26,6 @@ def get_0x_token_pricing(network, sell_token, buy_token, sell_amount):
                 e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
             )
             return create_response({"error": "Token pair not supported"}, status_code)
-
     api_key = os.getenv("API_KEY_0X")
     url = (
         f"{PRICING_API_URL[network]}/swap/v1/price"
@@ -58,9 +59,25 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / float(latest_data)
         total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
         return {"price": token_per_dollar, "total_amount": total_amount}
+    elif (
+        network == "2741"
+        and buy_token.lower() == ABSTRACT_PENGU_ADDRESS
+        and sell_token.lower() == USDC_ADDRESS_ON_ABSTRACT
+    ):
+        url = "https://hermes.pyth.network/v2/updates/price/latest?ids%5B%5D=0xbed3097008b9b5e3c93bec20be79cb43986b85a996475589351a21e67bae9b61"
+        response = requests.get(url, timeout=5)
+        data = response.json()
+        latest_data = data["parsed"][0]["price"]["price"]
+        token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / (
+            float(latest_data) / 10**8
+        )
+        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
+        return {"price": token_per_dollar, "total_amount": total_amount}
 
 
 def needs_alternative_pricing_route(network, sell_token, buy_token):
-    if network == "41455" and buy_token == NATIVE_ADDRESS:
+    if network == "41455" and buy_token.lower() == NATIVE_ADDRESS:
+        return True
+    if network == "2741" and buy_token.lower() == ABSTRACT_PENGU_ADDRESS:
         return True
     return False
