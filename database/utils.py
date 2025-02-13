@@ -47,7 +47,6 @@ def get_all_follower():
                 result = cur.fetchone()
                 return result[0] if result else None
     except Exception as e:
-        # Optionally log the error
         print(f"Error fetching follower: {e}")
         return None
 
@@ -69,24 +68,41 @@ def set_subscription(email):
         return HTTP_BAD_REQUEST
 
 
-def set_claimed(address, claim_option, signature):
+def get_all_creator_links():
+    """
+    Fetches all creator links.
+
+    Returns:
+        list: List of dictionaries containing 'link' and 'created_at'
+    """
+    query = "SELECT link, created_at FROM creator_links"
+
+    try:
+        with get_db_connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(query)
+                results = cur.fetchall()
+                return (
+                    [{"link": row[0], "created_at": row[1]} for row in results]
+                    if results
+                    else []
+                )
+    except Exception as e:
+        print(f"Error fetching creator links: {e}")
+        return None
+
+
+def add_creator_link(link):
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
                 insert_query = """
-                    INSERT INTO claims (address, claim_option, signature)
-                    VALUES (%s, %s, %s)
-                    ON CONFLICT (address) DO NOTHING
+                    INSERT INTO creator_links (link)
+                    VALUES (%s)
+                    ON CONFLICT (link) DO NOTHING
                     RETURNING id;
                 """
-                cur.execute(
-                    insert_query,
-                    (
-                        address,
-                        claim_option,
-                        signature,
-                    ),
-                )
+                cur.execute(insert_query, (link,))
         return HTTP_OK
     except Exception as e:
         print(e)

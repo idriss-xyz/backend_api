@@ -37,40 +37,6 @@ def return_service_status():
     return create_response({}, status)
 
 
-@landing_bp.route("/claim-airdrop", methods=["POST", "OPTIONS"])
-@limiter.limit("5 per minute")
-def claim_airdrop():
-    """
-    Claims the airdrop.
-
-    Returns:
-        Response: success status
-
-    Todo: Add SIWE verification
-    """
-    if request.method == "OPTIONS":
-        return create_response("POST, OPTIONS")
-
-    # data = request.get_json()
-
-    # if (
-    #     not data
-    #     or "address" not in data
-    #     or "claim_option" not in data
-    #     or "signature" not in data
-    # ):
-    #     return create_response(
-    #         {"error": "Missing required parameter."}, HTTP_BAD_REQUEST
-    #     )
-
-    # address = data["address"].strip().lower()
-    # claim_option = data["claim_option"].strip().lower()
-    # signature = data["signature"].strip().lower()
-    # set_claimed(address, claim_option, signature)
-
-    return create_response({}, HTTP_OK)
-
-
 @landing_bp.route("/check-eligibility/<address>", methods=["GET", "OPTIONS"])
 @limiter.limit("5 per minute")
 def return_eligibility(address):
