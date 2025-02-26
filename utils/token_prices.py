@@ -4,6 +4,7 @@ import requests
 
 from server_responses import HTTP_BAD_REQUEST, create_response
 from utils.constants import (
+    JIN_ON_RONIN,
     NATIVE_ADDRESS,
     PENGU_ON_ABSTRACT,
     PRICING_API_URL,
@@ -58,8 +59,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         data = response.json()
         latest_data = data["Price"]
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / float(latest_data)
-        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": token_per_dollar, "total_amount": total_amount}
+        return {"price": token_per_dollar}
     elif (
         network == "2741"
         and buy_token.lower() == PENGU_ON_ABSTRACT
@@ -72,8 +72,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / (
             float(latest_data) / 10**8
         )
-        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": token_per_dollar, "total_amount": total_amount}
+        return {"price": token_per_dollar}
     elif (
         network == "2020"
         and buy_token.lower() == NATIVE_ADDRESS
@@ -88,6 +87,16 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         )
         total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
         return {"price": token_per_dollar, "total_amount": total_amount}
+    elif (
+        network == "2020"
+        and buy_token.lower() == JIN_ON_RONIN
+        and sell_token.lower() == USDC_ADDRESS_ON_RONIN
+    ):
+        url = "https://api.roninchain.com/routing-api/prod/quote?tokenInChainId=2020&tokenInAddress=0x0B7007c13325C48911F73A2daD5FA5dCBf808aDc&tokenOutChainId=2020&tokenOutAddress=0xc340d3EdC4b11B56b5048991Aad5199659062f8C&amount=1000000&type=exactIn&enableUniversalRouter=true&enableFeeOnTransferFeeFetching=true&intent=quote&protocols=v3%2Cv2%2Cmixed&slippageTolerance=0.5"
+        response = requests.get(url, timeout=5)
+        data = response.json()
+        token_per_dollar = data["quoteDecimals"]
+        return {"price": token_per_dollar}
 
 
 def needs_alternative_pricing_route(network, sell_token, buy_token):
@@ -95,6 +104,6 @@ def needs_alternative_pricing_route(network, sell_token, buy_token):
         return True
     if network == "2741" and buy_token.lower() == PENGU_ON_ABSTRACT:
         return True
-    if network == "2020" and buy_token.lower() == NATIVE_ADDRESS:
+    if network == "2020" and (buy_token.lower() in [NATIVE_ADDRESS, JIN_ON_RONIN]):
         return True
     return False
