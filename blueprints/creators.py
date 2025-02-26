@@ -9,6 +9,7 @@ from server_responses.responses import (
     HTTP_FORBIDDEN_REQUEST,
     HTTP_UNAUTHORIZED_REQUEST,
 )
+from utils.helper import purge_links
 from utils.validator import ALLOWED_ORIGINS, is_valid_donation_url
 from web3_utils import ns
 
@@ -45,10 +46,11 @@ def get_creator_links_endpoint():
         return create_response({"error": "Unauthorized"}, HTTP_UNAUTHORIZED_REQUEST)
 
     links = get_all_creator_links()
+    unique_addresses = purge_links(links)
     if links is None:
         return create_response({"error": "Failed to fetch links"}, HTTP_BAD_REQUEST)
 
-    unique_count = len({entry["link"] for entry in links})
+    unique_count = len(unique_addresses)
     return create_response({"count": unique_count, "links": links}, HTTP_OK)
 
 
