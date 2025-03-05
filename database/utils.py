@@ -1,5 +1,8 @@
+from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
+
 from database.connection import get_db_connection
 from server_responses import HTTP_BAD_REQUEST, HTTP_OK
+from web3_utils import ns
 
 
 def get_follower_with_connected_address(name=None):
@@ -93,6 +96,16 @@ def get_all_creator_links():
 
 
 def add_creator_link(link):
+    parsed = urlparse(link)
+    query_params = parse_qs(parsed.query)
+    try:
+        potential_ens = query_params["address"][0]
+        if ns.is_valid_name(potential_ens):
+            query_params["address"] = [ns.address(potential_ens)]
+    except:
+        print("ENS resolver")
+    new_query = urlencode(query_params, doseq=True)
+    updated_link = urlunparse(parsed._replace(query=new_query))
     try:
         with get_db_connection() as conn:
             with conn.cursor() as cur:
@@ -102,7 +115,7 @@ def add_creator_link(link):
                     ON CONFLICT (link) DO NOTHING
                     RETURNING id;
                 """
-                cur.execute(insert_query, (link,))
+                cur.execute(insert_query, (updated_link,))
         return HTTP_OK
     except Exception as e:
         print(e)
