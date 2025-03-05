@@ -9,12 +9,13 @@ from utils.constants import (
     PRIORITY_GITCOIN_ROUNDS_MAPPING,
     TOKEN_ROUTE,
 )
-from web3_utils import ns
+from web3_utils import is_address, ns
 
 
 def purge_links(links):
     addresses_raw = []
     return_addresses = []
+    resolved = {}
     for url in [entry["link"] for entry in links]:
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
@@ -22,8 +23,11 @@ def purge_links(links):
         if address:
             addresses_raw.append(address.lower())
     for address in addresses_raw:
-        if ns.is_valid_name(address):
-            return_addresses.append(ns.address(address))
+        if not is_address(address):
+
+            resolved_address = resolved.get(address.lower(), ns.address(address))
+            resolved[address.lower()] = resolved_address
+            return_addresses.append(resolved_address)
         else:
             return_addresses.append(address)
     return set(addresses_raw)
