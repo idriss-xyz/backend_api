@@ -3,6 +3,7 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from database.connection import get_db_connection
 from server_responses import HTTP_BAD_REQUEST, HTTP_OK
 from web3_utils import ns
+from web3_utils.utils import is_address
 
 
 def get_follower_with_connected_address(name=None):
@@ -100,10 +101,11 @@ def add_creator_link(link):
     query_params = parse_qs(parsed.query)
     try:
         potential_ens = query_params["address"][0]
-        if ns.is_valid_name(potential_ens):
+        if not is_address(potential_ens):
             query_params["address"] = [ns.address(potential_ens)]
+            query_params["submitted-address"] = [potential_ens]
     except:
-        print("ENS resolver")
+        print("ENS resolver error")
     new_query = urlencode(query_params, doseq=True)
     updated_link = urlunparse(parsed._replace(query=new_query))
     try:
