@@ -215,7 +215,7 @@ def update_twitter_verifications():
 
 
 def set_interval(func, sec):
-    for _ in range(4):
+    for _ in range(2):
         try:
             func()
         except Exception:
