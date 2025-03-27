@@ -9,6 +9,7 @@ from utils.graph_ql.fc_connected_addresses import get_farcaster_verified_address
 farcaster_bp = Blueprint("fc", __name__)
 
 
+# used for fc address only
 @farcaster_bp.route("/get-connected-addresses", methods=["GET"])
 def get_fc_connected_addresses():
     fc_name = request.args.get("name")
