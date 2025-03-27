@@ -223,4 +223,4 @@ def set_interval(func, sec):
         time.sleep(sec)
 
 
-set_interval(update_follower, 120)
+set_interval(update_follower, 300)
