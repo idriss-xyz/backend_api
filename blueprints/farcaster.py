@@ -69,7 +69,7 @@ def get_all_fc_links():
     follower_data = get_follower_with_connected_address()
 
     try:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": "temporarily unavailable"}), 400
         # return jsonify(follower_data), 200
 
     except requests.RequestException as e:
