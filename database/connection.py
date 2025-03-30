@@ -1,73 +1,68 @@
-import os
-from urllib.parse import urlparse
+from contextlib import contextmanager
 
-import psycopg2
+from .pool import get_db_connection, return_db_connection
 
-DATABASE_URL = os.getenv("DATABASE_URL")
-result = urlparse(DATABASE_URL)
-username = result.username
-password = result.password
-database = result.path[1:]
-hostname = result.hostname
-port = result.port
+@contextmanager
+def get_db_cursor():
+    """Context manager for database cursor"""
+    conn = get_db_connection()
+    try:
+        yield conn.cursor()
+        conn.commit()
+    finally:
+        conn.close()
+        return_db_connection(conn)
 
+def create_table():
+    """Create required database tables"""
+    conn = get_db_connection()
+    try:
+        cur = conn.cursor()
 
-def create_table(connection):
-    cur = connection.cursor()
-
-    # Create the table for storing followers as JSON
-    cur.execute(
+        # Create the table for storing followers as JSON
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS followers (
+                id SERIAL PRIMARY KEY,
+                follower_data jsonb
+            )
         """
-        CREATE TABLE IF NOT EXISTS followers (
-            id SERIAL PRIMARY KEY,
-            follower_data jsonb
         )
-    """
-    )
 
-    cur.execute(
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS pm_subscribers (
+                id SERIAL PRIMARY KEY,
+                email VARCHAR(255) UNIQUE NOT NULL,
+                subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
         """
-        CREATE TABLE IF NOT EXISTS pm_subscribers (
-            id SERIAL PRIMARY KEY,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-    """
-    )
+        )
 
-    cur.execute(
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS twitter_cache (
+                user_name VARCHAR(20) NOT NULL,
+                user_id VARCHAR(25) NOT NULL,
+                topicality TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_name),
+                UNIQUE (user_id)
+            );
         """
-        CREATE TABLE IF NOT EXISTS twitter_cache (
-            user_name VARCHAR(20) NOT NULL,
-            user_id VARCHAR(25) NOT NULL,
-            topicality TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            PRIMARY KEY (user_name),
-            UNIQUE (user_id)
-        );
-    """
-    )
+        )
 
-    cur.execute(
+        cur.execute(
+            """
+            CREATE TABLE IF NOT EXISTS creator_links (
+                id SERIAL PRIMARY KEY,
+                link TEXT NOT NULL UNIQUE,
+                created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+            );
         """
-        CREATE TABLE IF NOT EXISTS creator_links (
-            id SERIAL PRIMARY KEY,
-            link TEXT NOT NULL UNIQUE,
-            created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-    """
-    )
+        )
 
-    connection.commit()
-    cur.close()
-    connection.close()
-
-
-def get_db_connection():
-    return psycopg2.connect(
-        dbname=database, user=username, password=password, host=hostname, port=port
-    )
-
-
-conn = get_db_connection()
-
-create_table(conn)
+        conn.commit()
+        cur.close()
+    finally:
+        conn.close()
+        return_db_connection(conn)

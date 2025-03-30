@@ -10,11 +10,16 @@ from blueprints import (
     snap_bp,
 )
 from cache import twitter_cache, twitter_name_cache
+from database import initialize_pool
+from database.connection import create_table
 from limiter import limiter
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+# Initialize services
+initialize_pool()
+create_table()
 limiter.init_app(app)
 twitter_cache.init_app(app)
 twitter_name_cache.init_app(app)

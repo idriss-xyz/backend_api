@@ -9,6 +9,7 @@ from utils.graph_ql.fc_connected_addresses import get_farcaster_verified_address
 farcaster_bp = Blueprint("fc", __name__)
 
 
+# Replace with official new warpcast api using primary wallets
 @farcaster_bp.route("/get-connected-addresses", methods=["GET"])
 def get_fc_connected_addresses():
     fc_name = request.args.get("name")
@@ -66,7 +67,7 @@ def get_all_fc_links():
     Endpoint to fetch followers information.
     """
 
-    follower_data = get_follower_with_connected_address()
+    # follower_data = get_follower_with_connected_address()
 
     try:
         return jsonify({"error": "temporarily unavailable"}), 400
