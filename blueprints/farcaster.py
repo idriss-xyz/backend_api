@@ -4,7 +4,8 @@ import requests
 from flask import Blueprint, jsonify, request
 
 from database.utils import get_all_follower, get_follower_with_connected_address
-from utils.graph_ql.fc_connected_addresses import get_farcaster_verified_addresses
+from server_responses.responses import HTTP_BAD_REQUEST, HTTP_OK
+from utils.farcaster import get_farcaster_verified_addresses_from_api, get_fid
 
 farcaster_bp = Blueprint("fc", __name__)
 
@@ -14,31 +15,26 @@ def get_fc_connected_addresses():
     fc_name = request.args.get("name")
 
     if not fc_name:
-        return jsonify({"error": "Missing name parameter"}), 400
+        return jsonify({"error": "Missing name parameter"}), HTTP_BAD_REQUEST
 
     try:
-        response = get_farcaster_verified_addresses(fc_name)
-        socials = response.get("Socials", {}).get("Social", [])
-        if not socials:
-            return jsonify({"error": "No socials data found"}), 404
-        addresses = socials[0].get("connectedAddresses", [])
-        fid = socials[0].get("userId")
+        response_fid = get_fid(fc_name)
+        fid = response_fid.get("fid")
+        print("fid", fid)
         if not fid:
-            return jsonify({"error": "FID not found"}), 404
-        freshest_evm_address = max(
-            (addr for addr in addresses if addr.get("address", "").startswith("0x")),
-            key=lambda addr: datetime.fromisoformat(
-                addr["timestamp"].replace("Z", "+00:00")
+            return jsonify({"error": "FID not found"}), HTTP_BAD_REQUEST
+        primary_address = get_farcaster_verified_addresses_from_api(fid)
+        print(primary_address)
+        return (
+            jsonify(
+                {"address": primary_address["result"]["address"]["address"], "fid": fid}
             ),
-            default=None,
+            HTTP_OK,
         )
-        if freshest_evm_address is None:
-            return jsonify({"address": None, "fid": fid}), 200
-        return jsonify({"address": freshest_evm_address["address"], "fid": fid}), 200
     except requests.RequestException as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), HTTP_BAD_REQUEST
     except (KeyError, TypeError):
-        return jsonify({"error": "Invalid response structure"}), 400
+        return jsonify({"error": "Invalid response structure"}), HTTP_BAD_REQUEST
 
 
 @farcaster_bp.route("/get-link", methods=["GET"])
@@ -49,15 +45,15 @@ def get_fc_link():
     account = request.args.get("name")
 
     if not account:
-        return jsonify({"error": "Missing name parameter"}), 400
+        return jsonify({"error": "Missing name parameter"}), HTTP_BAD_REQUEST
 
     follower_data = get_follower_with_connected_address(account)
 
     try:
-        return jsonify(follower_data), 200
+        return jsonify(follower_data), HTTP_OK
 
     except requests.RequestException as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), HTTP_BAD_REQUEST
 
 
 @farcaster_bp.route("/get-links", methods=["GET"])
@@ -69,11 +65,10 @@ def get_all_fc_links():
     follower_data = get_follower_with_connected_address()
 
     try:
-        # return jsonify({"error": "temporarily unavailable"}), 400
-        return jsonify(follower_data), 200
+        return jsonify(follower_data), HTTP_OK
 
     except requests.RequestException as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), HTTP_BAD_REQUEST
 
 
 @farcaster_bp.route("/get-all-followers", methods=["GET"])
@@ -85,7 +80,7 @@ def get_all_fc_followers():
     follower_data = get_all_follower()
 
     try:
-        return jsonify(follower_data), 200
+        return jsonify(follower_data), HTTP_OK
 
     except requests.RequestException as e:
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), HTTP_BAD_REQUEST

@@ -57,7 +57,7 @@ def return_service_status():
         return handle_options_request()
 
     status = get_status()
-    return status, 200
+    return status, HTTP_OK
 
 
 @extension_bp.route("/token-price", methods=["GET", "OPTIONS"])
