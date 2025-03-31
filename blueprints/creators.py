@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, make_response, render_template, request
+from flask import Blueprint, make_response, redirect, render_template, request
 
 from database.utils import add_creator_link, get_all_creator_links
 from server_responses import HTTP_OK, create_response
@@ -66,3 +66,13 @@ def find_address():
         reverse_resolved = None
     response = create_response({"name": reverse_resolved}, HTTP_OK)
     return response
+
+
+@creators_bp.route("/creators/obs", methods=["GET"])
+def serve_obs():
+    address = request.args.get("address")
+    streamerAddress = request.args.get("streamerAddress")
+    final_address = address or streamerAddress
+    if final_address:
+        return redirect(f"https://www.idriss.xyz/creators/obs?address={final_address}")
+    return redirect("https://www.idriss.xyz/creators/obs")
