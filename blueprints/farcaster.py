@@ -5,7 +5,7 @@ from flask import Blueprint, jsonify, request
 
 from database.utils import get_all_follower, get_follower_with_connected_address
 from server_responses.responses import HTTP_BAD_REQUEST, HTTP_OK
-from utils.farcaster import get_farcaster_verified_addresses_from_api, get_fid
+from utils.farcaster import get_farcaster_primary_address_from_api, get_fid
 
 farcaster_bp = Blueprint("fc", __name__)
 
@@ -23,7 +23,7 @@ def get_fc_connected_addresses():
         print("fid", fid)
         if not fid:
             return jsonify({"error": "FID not found"}), HTTP_BAD_REQUEST
-        primary_address = get_farcaster_verified_addresses_from_api(fid)
+        primary_address = get_farcaster_primary_address_from_api(fid)
         print(primary_address)
         return (
             jsonify(
