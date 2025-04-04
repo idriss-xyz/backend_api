@@ -4,11 +4,13 @@ import requests
 
 from server_responses import HTTP_BAD_REQUEST, create_response
 from utils.constants import (
+    CUSD_ADDRESS,
     NATIVE_ADDRESS,
     PENGU_ON_ABSTRACT,
     PRICING_API_URL,
     USDC_ADDRESS_ON_ABSTRACT,
     USDC_ADDRESS_ON_ALEPH,
+    USDC_ADDRESS_ON_CELO,
     USDC_ADDRESS_ON_RONIN,
     USDC_DECIMALS,
     UNSUPPORTED_0x_NETWORKS,
@@ -58,8 +60,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         data = response.json()
         latest_data = data["Price"]
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / float(latest_data)
-        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": token_per_dollar, "total_amount": total_amount}
+        return {"price": token_per_dollar}
     elif (
         network == "2741"
         and buy_token.lower() == PENGU_ON_ABSTRACT
@@ -72,8 +73,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / (
             float(latest_data) / 10**8
         )
-        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": token_per_dollar, "total_amount": total_amount}
+        return {"price": token_per_dollar}
     elif (
         network == "2020"
         and buy_token.lower() == NATIVE_ADDRESS
@@ -86,8 +86,26 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / (
             float(latest_data) / 10**8
         )
-        total_amount = float(latest_data) * float(sell_amount) / 10**USDC_DECIMALS
-        return {"price": token_per_dollar, "total_amount": total_amount}
+        return {"price": token_per_dollar}
+    elif (
+        network == "42220"
+        and sell_token.lower() == CUSD_ADDRESS
+        and sell_token.lower() == USDC_ADDRESS_ON_CELO
+    ):
+        return {"price": 1}
+    elif (
+        network == "42220"
+        and buy_token.lower() == NATIVE_ADDRESS
+        and sell_token.lower() == USDC_ADDRESS_ON_CELO
+    ):
+        url = "https://hermes.pyth.network/v2/updates/price/latest?ids%5B%5D=0x7d669ddcdd23d9ef1fa9a9cc022ba055ec900e91c4cb960f3c20429d4447a411"
+        response = requests.get(url, timeout=5)
+        data = response.json()
+        latest_data = data["parsed"][0]["price"]["price"]
+        token_per_dollar = (float(sell_amount) / 10**USDC_DECIMALS) / (
+            float(latest_data) / 10**8
+        )
+        return {"price": token_per_dollar}
 
 
 def needs_alternative_pricing_route(network, sell_token, buy_token):
@@ -96,5 +114,7 @@ def needs_alternative_pricing_route(network, sell_token, buy_token):
     if network == "2741" and buy_token.lower() == PENGU_ON_ABSTRACT:
         return True
     if network == "2020" and buy_token.lower() == NATIVE_ADDRESS:
+        return True
+    if network == "42220":
         return True
     return False
