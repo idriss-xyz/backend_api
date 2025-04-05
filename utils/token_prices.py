@@ -89,7 +89,7 @@ def get_alternative_token_price(network, sell_token, buy_token, sell_amount):
         return {"price": token_per_dollar}
     elif (
         network == "42220"
-        and sell_token.lower() == CUSD_ADDRESS
+        and buy_token.lower() == CUSD_ADDRESS
         and sell_token.lower() == USDC_ADDRESS_ON_CELO
     ):
         return {"price": 1}
