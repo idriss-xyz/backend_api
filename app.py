@@ -9,7 +9,7 @@ from blueprints import (
     library_bp,
     snap_bp,
 )
-from cache import twitter_cache, twitter_name_cache
+from cache import kaito_cache, twitter_cache, twitter_name_cache
 from limiter import limiter
 
 app = Flask(__name__)
@@ -18,6 +18,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 limiter.init_app(app)
 twitter_cache.init_app(app)
 twitter_name_cache.init_app(app)
+kaito_cache.init_app(app)
 
 app.register_blueprint(creators_bp)
 app.register_blueprint(snap_bp)

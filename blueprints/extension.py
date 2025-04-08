@@ -22,6 +22,7 @@ import requests
 from flask import Blueprint, request
 from jsonschema import ValidationError, validate
 
+from cache import kaito_cache
 from limiter import limiter
 from server_responses import (
     HTTP_BAD_GATEWAY,
@@ -386,3 +387,45 @@ def get_twitter_names_plugin_v2():
     response = create_response(result_names_extension, HTTP_OK)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
+
+
+@extension_bp.route("/smart-followers", methods=["GET"])
+@limiter.limit("5 per second")
+def get_smart_followers():
+    """
+    Get smart followers for a given username from Kaito API with caching and rate limiting.
+
+    Query Parameters:
+        username (str): The username to fetch smart followers for
+
+    Returns:
+        Response: JSON response containing smart followers data or error message
+    """
+    username = request.args.get("username")
+
+    if not username:
+        return create_response({"error": "Username not provided"}, HTTP_BAD_REQUEST)
+
+    if kaito_cache.get(username.lower()):
+        return create_response(
+            {"smart_followers": kaito_cache[username.lower()]}, HTTP_OK
+        )
+
+    # Fetch from Kaito API
+    try:
+        response = requests.get(
+            f"https://api.kaito.ai/api/v1/smart_followers",
+            params={"username": username},
+            headers={"x-api-key": os.getenv("KAITO_API_KEY", "")},
+            timeout=10,
+        )
+        response.raise_for_status()
+
+        smart_followers_raw = response.json()
+        smart_followers = smart_followers_raw["num_of_smart_followers"]
+        kaito_cache.set(username.lower(), smart_followers)
+
+        return create_response({"smart_followers": smart_followers}, HTTP_OK)
+
+    except requests.RequestException as e:
+        return create_response({"error": "Failed to fetch events"}, HTTP_BAD_GATEWAY)
