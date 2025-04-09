@@ -427,5 +427,5 @@ def get_smart_followers():
 
         return create_response({"smart_followers": smart_followers}, HTTP_OK)
 
-    except requests.RequestException as e:
-        return create_response({"error": "Failed to fetch events"}, HTTP_BAD_GATEWAY)
+    except requests.RequestException:
+        return create_response({"error": "Failed to fetch events"}, HTTP_BAD_REQUEST)
