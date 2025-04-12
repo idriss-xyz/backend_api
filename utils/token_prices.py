@@ -5,9 +5,9 @@ import requests
 from server_responses import HTTP_BAD_REQUEST, create_response
 from utils.constants import (
     CUSD_ADDRESS,
+    DEFAULT_TAKER,
     NATIVE_ADDRESS,
     PENGU_ON_ABSTRACT,
-    PRICING_API_URL,
     USDC_ADDRESS_ON_ABSTRACT,
     USDC_ADDRESS_ON_ALEPH,
     USDC_ADDRESS_ON_CELO,
@@ -31,12 +31,14 @@ def get_0x_token_pricing(network, sell_token, buy_token, sell_amount):
             return create_response({"error": "Token pair not supported"}, status_code)
     api_key = os.getenv("API_KEY_0X")
     url = (
-        f"{PRICING_API_URL[network]}/swap/v1/price"
-        f"?sellToken={sell_token}"
+        f"https://api.0x.org/swap/permit2/price"
+        f"?chainId={network}"
+        f"&sellToken={sell_token}"
         f"&buyToken={buy_token}"
         f"&sellAmount={sell_amount}"
+        f"&taker={DEFAULT_TAKER}"
     )
-    headers = {"0x-api-key": api_key}
+    headers = {"0x-api-key": api_key, "0x-version": "v2"}
 
     try:
         api_response = requests.get(url, headers=headers, timeout=10)

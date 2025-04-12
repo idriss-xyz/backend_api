@@ -15,6 +15,7 @@ AXIE_ON_ETHEREUM = "0xbb0e17ef65f82ab018d8edd776e8dd940327b28b"
 DAI_ADDRESS_ON_ETH = "0x6b175474e89094c44da98b954eedeac495271d0f"
 CUSD_ADDRESS = "0x765de816845861e75a25fca122bb6898b8b1282a"
 NULL_ADDRESS = "0x0000000000000000000000000000000000000000"
+DEFAULT_TAKER = "0xd8da6bf26964af9d7eed9e03e53415d37aa96045"
 
 INELIGIBLE = {
     "paid": 0,
@@ -49,16 +50,6 @@ PRIORITY_GITCOIN_ROUNDS = [("388", 42161), ("389", 42161)]
 PRIORITY_GITCOIN_ROUNDS_MAPPING = {
     combo: index for index, combo in enumerate(PRIORITY_GITCOIN_ROUNDS)
 }
-
-PRICING_API_URL = {
-    "1": "https://api.0x.org",
-    "10": "https://optimism.api.0x.org",
-    "56": "https://bsc.api.0x.org",
-    "137": "https://polygon.api.0x.org",
-    "8453": "https://base.api.0x.org",
-    "42161": "https://arbitrum.api.0x.org",
-}
-
 
 TOKEN_ROUTE = {
     f"5000:{NATIVE_ADDRESS}": WRAPPED_MANTLE_ON_ETH,
