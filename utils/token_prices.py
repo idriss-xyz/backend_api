@@ -43,7 +43,9 @@ def get_0x_token_pricing(network, sell_token, buy_token, sell_amount):
     try:
         api_response = requests.get(url, headers=headers, timeout=10)
         api_response.raise_for_status()
-        return create_response(api_response.json(), api_response.status_code)
+        api_data = api_response.json()
+        price = int(api_data.get("buyAmount", 0)) / 1e18
+        return create_response({"price": price}, api_response.status_code)
     except requests.RequestException as e:
         status_code = (
             e.response.status_code if hasattr(e, "response") else HTTP_BAD_REQUEST
