@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, make_response, redirect, render_template, request
+from flask import Blueprint, redirect, request
 
 from database.utils import add_creator_link, get_all_creator_links
 from server_responses import HTTP_OK, create_response
@@ -46,10 +46,13 @@ def get_creator_links_endpoint():
         return create_response({"error": "Unauthorized"}, HTTP_UNAUTHORIZED_REQUEST)
 
     links = get_all_creator_links()
-    unique_addresses = purge_links(links)
+
     if links is None:
         return create_response({"error": "Failed to fetch links"}, HTTP_BAD_REQUEST)
 
+    links.sort(key=lambda item: item["created_at"])
+
+    unique_addresses = purge_links(links)
     unique_count = len(unique_addresses)
     return create_response({"count": unique_count, "links": links}, HTTP_OK)
 

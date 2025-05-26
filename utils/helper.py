@@ -24,7 +24,6 @@ def purge_links(links):
             addresses_raw.append(address.lower())
     for address in addresses_raw:
         if not is_address(address):
-
             resolved_address = resolved.get(address.lower(), ns.address(address))
             resolved[address.lower()] = resolved_address
             return_addresses.append(resolved_address)
