@@ -22,9 +22,11 @@ URL_SCHEMA = {
 
 def is_valid_donation_url(url: str) -> bool:
     pattern = re.compile(
-        r"^https:\/\/www\.idriss\.xyz\/creators\/donate\?address="
-        r"(0x[\dA-Fa-f]{40}|[\w-]+(\.[a-z]+)+)&token="
-        r"[\w,]+&network="
-        r"[\w,]+&creatorName=[\w%]+$"
+        r"^https://www\.idriss\.xyz/creators/"
+        r"(?:(?:donate\?address="
+        r"(0x[\da-fA-F]{40}|[\w-]+(?:\.[a-z]+)+)"
+        r"&token=[\w,]+&network=[\w,]+&creatorName=[\w%]+)"
+        r"|[A-Za-z0-9_-]+)"
+        r"/?$"
     )
     return bool(pattern.fullmatch(url))
