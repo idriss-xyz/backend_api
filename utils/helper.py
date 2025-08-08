@@ -1,5 +1,5 @@
 import base64
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import quote, unquote, urlparse, urlunparse
 
 import requests
 
@@ -9,27 +9,22 @@ from utils.constants import (
     PRIORITY_GITCOIN_ROUNDS_MAPPING,
     TOKEN_ROUTE,
 )
-from web3_utils import is_address, ns
 
 
-def purge_links(links):
-    addresses_raw = []
-    return_addresses = []
-    resolved = {}
-    for url in [entry["link"] for entry in links]:
-        parsed = urlparse(url)
-        params = parse_qs(parsed.query)
-        address = params.get("address", [None])[0]
-        if address:
-            addresses_raw.append(address.lower())
-    for address in addresses_raw:
-        if not is_address(address):
-            resolved_address = resolved.get(address.lower(), ns.address(address))
-            resolved[address.lower()] = resolved_address
-            return_addresses.append(resolved_address)
-        else:
-            return_addresses.append(address)
-    return set(addresses_raw)
+def encode_nested_url_in_path(full_url: str) -> str:
+    parsed = urlparse(full_url)
+    path_parts = parsed.path.split("/")
+
+    for i, part in enumerate(path_parts):
+        if part.startswith("http"):
+            nested_url = "/".join(path_parts[i:])
+            if parsed.query:
+                nested_url += "?" + parsed.query
+            encoded = quote(unquote(nested_url), safe="")
+            new_path = "/".join(path_parts[:i] + [encoded])
+            return urlunparse(parsed._replace(path=new_path, query=""))
+
+    raise ValueError("No nested URL found in path")
 
 
 def get_token_router(network, buy_token, sell_token):
@@ -40,7 +35,7 @@ def get_token_router(network, buy_token, sell_token):
 
 
 def fetch_data(url, return_type):
-    response = requests.get(url, timeout=10)
+    response = requests.get(encode_nested_url_in_path(url), timeout=10)
     response.raise_for_status()
 
     if return_type == "json":
