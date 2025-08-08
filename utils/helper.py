@@ -27,6 +27,13 @@ def encode_nested_url_in_path(full_url: str) -> str:
     raise ValueError("No nested URL found in path")
 
 
+def safe_encode_nested_url(url: str) -> str:
+    try:
+        return encode_nested_url_in_path(url)
+    except ValueError:
+        return url
+
+
 def get_token_router(network, buy_token, sell_token):
     sell_token = TOKEN_ROUTE[f"{network}:{sell_token.lower()}"]
     buy_token = TOKEN_ROUTE[f"{network}:{buy_token.lower()}"]
@@ -35,7 +42,7 @@ def get_token_router(network, buy_token, sell_token):
 
 
 def fetch_data(url, return_type):
-    response = requests.get(encode_nested_url_in_path(url), timeout=10)
+    response = requests.get(safe_encode_nested_url(url), timeout=10)
     response.raise_for_status()
 
     if return_type == "json":
