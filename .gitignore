@@ -6,3 +6,4 @@ cache
 .vscode
 internal
 .aider*
+.env.*
